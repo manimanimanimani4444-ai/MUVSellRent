@@ -23,7 +23,6 @@ import threading
 import time
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
-from types import SimpleNamespace
 from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 
@@ -39,12 +38,12 @@ if TYPE_CHECKING:
 
 # NAME / VERSION / DESCRIPTION / CHANGELOG / COMPAT / MAP_FILE — по одной строке: их читает сайт (/api/plugins)
 NAME = "MUVSell Rent"
-VERSION = "1.0.5"
+VERSION = "1.0.6"
 DESCRIPTION = "Перепродажа аренды Steam-аккаунтов MUVSell на FunPay: автовыдача, коды Steam Guard, продления, синхронизация наличия и цен, автовыставление лотов, статистика."
 CREDITS = "@MUVSell"
 UUID = "ce1c0a2b-f7df-4a0d-90d3-31012b5ab720"
 SETTINGS_PAGE = True
-CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя."
+CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их."
 COMPAT = "FunPay Cardinal 0.1.17.15"
 MAP_FILE = "muvsell_funpay_map.json"
 
@@ -71,7 +70,8 @@ TEXTS = {  # сообщения покупателю в чат FunPay и тек�
                  "👤 Логин: {login}\n🔑 Пароль: {password}\n"
                  "⏳ Срок: {hours} ч. — до {expires}\n\n"
                  "🔐 Код Steam Guard — !код\n⌛ Сколько осталось — !время\n📋 Все команды — !помощь\n\n"
-                 "Продлить: оплатите лот ещё раз или напишите {word}. Хорошей игры! 🎯"),
+                 "🔄 Продлить этот аккаунт: {word} 3 — на 3 ч, {word} 2д — на 2 дня.\n"
+                 "🛒 Новая покупка лота выдаст другой аккаунт. Хорошей игры! 🎯"),
     "extended": ("✅ Готово! Аренда {game} продлена на {hours} ч.\n"
                  "👤 Аккаунт тот же: {login} — вход без изменений.\n🕒 Играйте до {expires}"),
     "ext_usage": ("🔄 Как продлить: напишите {word} и срок — часы или дни.\n"
@@ -80,7 +80,8 @@ TEXTS = {  # сообщения покупателю в чат FunPay и тек�
                       "🎮 {game} · +{time}\n💰 К оплате: {price} ₽\n👉 {link}\n\n"
                       "⏱ Лот доступен {minutes} мин. После оплаты время само добавится к аккаунту {login}."),
     "ext_lot_fail": ("😔 Лот для продления сейчас создать не вышло.\n"
-                     "Попробуйте через пару минут — или просто оплатите основной лот ещё раз."),
+                     "Попробуйте через пару минут — продавец уже в курсе. Покупка основного лота выдаст новый "
+                     "аккаунт, а не продлит этот."),
     "review_offer": ("🎁 Небольшой подарок: оставьте отзыв на {stars}★ к этому заказу — "
                      "и мы бесплатно добавим {bonus} ч. к аренде, пока она идёт."),
     "review_bonus": "💚 Спасибо за отзыв! Аренда {login} продлена на {hours} ч. в подарок.\n🕒 Играйте до {expires}",
@@ -98,16 +99,11 @@ TEXTS = {  # сообщения покупателю в чат FunPay и тек�
     "creds": "👤 {game}\nЛогин: {login}\nПароль: {password}\n🕒 До {expires}",
     "help": "📋 Команды для вашей аренды:\n{commands}",
     "warn": ("⏳ Аренда {game} ({login}) закончится через {left} ({expires}).\n"
-             "Хотите ещё? Напишите {word} или оплатите лот снова — время добавится к этому же аккаунту."),
+             "Продлить этот же аккаунт: напишите {word} и срок, например {word} 3.\n"
+             "Новая покупка лота выдаст другой аккаунт."),
     "ended": ("🏁 Аренда {game} ({login}) завершена — доступ к аккаунту закрыт.\n"
               "Спасибо, что были с нами! Понравилось — будем рады отзыву 💚"),
     "no_rental": "🔎 Не вижу у вас активной аренды. Если только что оплатили — подождите минуту и повторите.",
-    "which_extend": "💳 Оплата пришла, но у вас несколько аккаунтов {game}. Какой продлить?\nНапишите: !прод логин\n{logins}",
-    "extend_none": "💳 Оплаченного продления нет — сначала оплатите лот, потом напишите !прод логин.",
-    "friend_on": ("👥 Режим «Для друга» включён на {minutes} мин.\n"
-                  "Следующая оплата выдаст отдельный новый аккаунт, а не продлит ваш."),
-    "friend_already": "👥 Режим «Для друга» уже включён — можно оплачивать.",
-    "partial": "📦 Выдано {delivered} из {ordered} аккаунтов. Остальные сейчас заняты — продавец уже знает и довыдаст.",
     "problem": "⚠️ Автовыдача не сработала — продавец уже получил уведомление и скоро всё выдаст вручную. Спасибо за терпение!",
     "ext_title_ru": "⏩ ПРОДЛЕНИЕ {game} на {time} #{tag}",
     "ext_title_en": "EXTENSION {game} for {time} #{tag}",
@@ -128,9 +124,8 @@ TEXT_LABELS = {
     "code": "🔑 Код Steam Guard (!код)", "code_which": "👥 Несколько аккаунтов — уточните логин",
     "code_fail": "⚠️ Код не получен", "time_left": "⌛ Сколько осталось (!время)", "creds": "👤 Данные аккаунта (!данные)",
     "help": "📋 Список команд (!помощь)", "warn": "⏳ Аренда скоро закончится", "ended": "🏁 Аренда закончилась",
-    "no_rental": "🔎 Нет активной аренды", "which_extend": "💳 Какой аккаунт продлить",
-    "extend_none": "💳 Нет оплаченного продления", "friend_on": "👥 Режим «друг» включён",
-    "friend_already": "👥 Режим «друг» уже включён", "partial": "📦 Выдано не всё", "problem": "🚨 Сбой автовыдачи",
+    "no_rental": "🔎 Нет активной аренды",
+    "problem": "🚨 Сбой автовыдачи",
     "ext_title_ru": "🏷 Название лота продления (RU)", "ext_title_en": "🏷 Название лота продления (EN)",
     "ext_desc_ru": "🇷🇺 Описание лота продления (RU)", "ext_desc_en": "🇬🇧 Описание лота продления (EN)",
 }
@@ -141,8 +136,8 @@ VAR_INFO = {  # переменная шаблона: (что это, приме�
     "code": ("код Steam Guard", "R7K2M"), "ttl": ("сколько секунд живёт код", "24"), "cmd": ("команда", "!код"),
     "logins": ("список логинов", "• muv_cs2_017\n• muv_cs2_042"), "minutes": ("минуты", "10"),
     "word": ("команда продления", "!продление"), "price": ("цена к оплате, ₽", "45"),
-    "link": ("ссылка на лот", "https://funpay.com/lots/offer?id=12345678"), "delivered": ("выдано", "1"),
-    "ordered": ("заказано", "2"), "reason": ("причина", "повторить можно через 10 мин."),
+    "link": ("ссылка на лот", "https://funpay.com/lots/offer?id=12345678"),
+    "reason": ("причина", "повторить можно через 10 мин."),
     "bonus": ("часов за отзыв", "2"), "stars": ("нужно звёзд", "5"), "commands": ("список команд (собирается сам)", ""),
     "tag": ("метка лота — обязательна, по ней плагин узнаёт оплату", "R7K2M"),
 }
@@ -153,12 +148,13 @@ AP_TEXTS = {
     "title_en": "{game} | Steam rental {time} | Auto delivery",
     "desc_ru": ("🎮 Лицензионный Steam-аккаунт {game} в аренду на {time}.\n"
                 "⚡ Логин и пароль придут в чат сами, сразу после оплаты — круглосуточно.\n"
-                "🔄 Оплатите лот ещё раз — время добавится к тому же аккаунту.\n\n"
+                "🔄 Продлить тот же аккаунт — командой в чате (ниже). Новая покупка лота выдаст другой аккаунт.\n\n"
                 "📋 Команды в чате заказа:\n{commands}\n\n"
                 "⏳ Когда срок выйдет, доступ закроется автоматически."),
     "desc_en": ("Licensed Steam account {game} for rent for {time}. Login and password arrive in the chat automatically "
                 "right after payment, 24/7. Chat commands: !code - Steam Guard code, !time - time left, "
-                "!extend 3 - add 3 hours, !friend - get a second account for a friend, !help - all commands."),
+                "!extend 3 - add 3 hours to the same account, !help - all commands. Buying the offer again gives you a new "
+                "account."),
 }
 AP_LABELS = {"title_ru": "🇷🇺 Название (RU)", "title_en": "🇬🇧 Название (EN)",
              "desc_ru": "🇷🇺 Описание (RU)", "desc_en": "🇬🇧 Описание (EN)"}
@@ -201,7 +197,6 @@ DEFAULTS = {
     "ext_word": "!продление",
     "ext_minutes": 10,          # сколько живёт временный лот продления
     "buyer_cmds": True,         # !кик и !пароль
-    "friend_minutes": 10,
     "bonus_hours": 2,
     "bonus_stars": 5,
     "balance_min": 0,
@@ -232,7 +227,6 @@ PARAMS = {  # ключ: (подпись, пояснение, дробное ли
     "lot_cap": ("Лимит на раздел", "Не создавать больше стольких лотов плагина в одном разделе FunPay "
                                    "(ваши остальные лоты в разделе не считаются).", False, "ac"),
     "ext_minutes": ("Лот продления живёт, мин", "Сколько минут временный лот продления ждёт оплату, потом удаляется.", False, "params"),
-    "friend_minutes": ("Режим «друг», мин", "Сколько минут после !друг оплата выдаёт новый аккаунт, а не продлевает.", False, "params"),
     "balance_min": ("Порог баланса", "Ниже этого баланса MUVSell лоты снимаются с продажи (если включён стоп).", True, "params"),
     "tz": ("Часовой пояс", "Смещение от UTC для «Действует до» и статистики (3 = МСК).", False, "params"),
     "min_price": ("Мин. цена лота, ₽", "Цена лота не опустится ниже этой. Слишком высокий порог даёт дешёвым играм "
@@ -243,7 +237,6 @@ PERIODS = {"today": "Сегодня", "yday": "Вчера", "7": "7 дней", "
 S: dict = {}         # настройки
 MAPS: list = []      # привязки: {lot_id, subcat, titles, game_id, game, hours, auto, price, markup, reprice, autohide, bonus, off}
 RENT: dict = {}      # ник покупателя (нижний регистр) → [аренды]
-PENDING: dict = {}   # ник покупателя → оплаченное продление, ждём «!прод логин»
 HIDDEN: dict = {}    # lot_id → почему снят с продажи: stock | balance
 DONE: list = []      # обработанные заказы FunPay
 SALES: list = []     # журнал продаж: {ts, order, buyer, game_id, game, hours, lot, rid, rev, cost, kind, refunded}
@@ -256,7 +249,6 @@ tg = None
 bot = None
 _lock = threading.RLock()
 _stop = threading.Event()
-_friend: dict = {}      # покупатель → когда включил !друг
 _notified: dict = {}    # антиспам уведомлений
 _costs: dict = {}       # (game_id, часы) → (ts, ₽)
 _market: dict = {}      # раздел FunPay → (ts, [(цена, описание)])
@@ -295,7 +287,7 @@ def _write(name: str, data):
 
 
 def _save(name: str):
-    _write(name, {"settings": S, "mappings": MAPS, "rentals": RENT, "pending": PENDING, "hidden": HIDDEN,
+    _write(name, {"settings": S, "mappings": MAPS, "rentals": RENT, "hidden": HIDDEN,
                   "handled": DONE, "sales": SALES, "problems": PROBLEMS, "created": CREATED, "extlots": EXT}[name])
 
 
@@ -319,14 +311,13 @@ def _load_all():
         if saved.get("lot_cap") == 10:
             S["lot_cap"] = DEFAULTS["lot_cap"]
     S.pop("tpl", None)
+    S.pop("friend_minutes", None)  # режим «друг» из 1.0.5: теперь каждая покупка — новый аккаунт
     S.pop("notify_sales", None)
     for key in ("texts", "cat_markup", "ap_texts"):
         S[key] = dict(S.get(key) or {})
     MAPS[:] = _load("mappings", [])
     RENT.clear()
     RENT.update(_load("rentals", {}))
-    PENDING.clear()
-    PENDING.update(_load("pending", {}))
     HIDDEN.clear()
     HIDDEN.update(_load("hidden", {}))
     DONE[:] = _load("handled", [])
@@ -902,10 +893,6 @@ def _rec(rid: str):
     return next((r for lst in list(RENT.values()) for r in lst if str(r.get("id")) == str(rid)), None)
 
 
-def _friend_on(buyer: str) -> bool:
-    return time.time() - _friend.get(buyer, 0) < int(S.get("friend_minutes") or 10) * 60
-
-
 def _add_hours(api: Api, rec: dict, hours: int):
     """Продлевает аренду порциями по ≤720 ч. → (сколько часов добавлено, ошибка, стоимость ₽)."""
     added, cost, err = 0, 0.0, None
@@ -946,7 +933,7 @@ def _new_rental(api: Api, m: dict, order, hours: int):
     _sale("new", rec, first + extra, float(rental.get("totalRub") or 0) + extra_cost, order)
     _send(order.chat_id, _t("delivery", game=m["game"], login=rec["login"], password=acc.get("password", ""),
                             hours=first + extra, expires=_when(rec["exp"]), word=S.get("ext_word") or "!продление"))
-    if _bonus_on(m) and sum(1 for s in SALES if s.get("order") == order.id) == 1:  # «для друга» — одно на заказ
+    if _bonus_on(m) and sum(1 for s in SALES if s.get("order") == order.id) == 1:  # одно предложение на заказ
         _send(order.chat_id, _t("review_offer", bonus=S.get("bonus_hours"), stars=S.get("bonus_stars")))
     _notify(f"✅ Выдан <code>{esc(rec['login'])}</code> — {esc(m['game'])}, {first + extra} ч → "
             f"<b>{esc(buyer)}</b> (аренда №{rec['number']})", order.id, cat="sales")
@@ -1001,40 +988,9 @@ def _process(order):
     qty = max(1, int(order.amount or 1))
     log.info(f"{LP} заказ {order.id}: {m['game']} × {qty}, {m['hours']} ч за шт, покупатель {buyer}")
 
-    if _friend_on(buyer):  # «для друга»: количество = сколько отдельных аккаунтов
-        done, err = 0, None
-        for _ in range(qty):
-            rec, err = _new_rental(api, m, order, int(m["hours"]))
-            if not rec:
-                break
-            done += 1
-        if not done:
-            _fail(order, err, api, m)
-        elif done < qty:
-            _send(order.chat_id, _t("partial", delivered=done, ordered=qty))
-            _notify(f"⚠️ Режим друга: выдано {done} из {qty} — {esc(_human(err, api))}", order.id)
-        return
-
-    hours = int(m["hours"]) * qty
-    mine = [r for r in _active(buyer) if r.get("game_id") == m["game_id"]]
-    if len(mine) > 1:
-        with _lock:
-            PENDING[buyer] = {"game_id": m["game_id"], "game": m["game"], "hours": hours, "order": order.id,
-                              "price": getattr(order, "price", 0),
-                              "cur": str(getattr(getattr(order, "currency", None), "name", "RUB"))}
-        _save("pending")
-        _send(order.chat_id, _t("which_extend", game=m["game"], logins="\n".join(f"• {r['login']}" for r in mine)))
-        return _notify(f"ℹ️ <b>{esc(order.buyer_username)}</b> оплатил продление {esc(m['game'])} на {hours} ч, "
-                       f"но у него {len(mine)} аккаунта — жду «!прод логин».", order.id, cat="sales")
-    if mine:
-        err = _extend(api, mine[0], hours, order.chat_id, order)
-        if not err:
-            return
-        if err not in ("bad_request", "not_found"):
-            return _fail(order, err, api, m)
-        mine[0]["exp"] = 0  # на сайте аренда уже закрыта — выдаём новый аккаунт
-        _save("rentals")
-    rec, err = _new_rental(api, m, order, hours)
+    # Каждая покупка — новый аккаунт, количество — часы на нём. Продлить свой аккаунт покупатель может
+    # только командой продления (временный лот, _pay_ext).
+    rec, err = _new_rental(api, m, order, int(m["hours"]) * qty)
     if not rec:
         _fail(order, err, api, m)
 
@@ -1116,26 +1072,6 @@ def _cmd_code(chat_id, buyer: str, arg: str):
                        f"{esc(_human('no_key') if not api else api.error or 'у аккаунта нет maFile')}", rec.get("order"),
                        dedup=f"code:{rec['id']}")
     _send(chat_id, _t("code", login=rec["login"], code=code["code"], ttl=code.get("expiresIn", 30)))
-
-
-def _cmd_extend(chat_id, buyer: str, arg: str):
-    p = PENDING.get(buyer)
-    rec = next((r for r in _active(buyer) if p and arg and r["login"].lower() == arg.lower()
-                and r.get("game_id") == p["game_id"]), None)
-    if not rec:
-        return _send(chat_id, _t("extend_none"))
-    api = _api()
-    with _lock:
-        PENDING.pop(buyer, None)  # снимаем до продления — повторная команда не продлит дважды
-    _save("pending")
-    order = SimpleNamespace(id=p.get("order"), price=p.get("price", 0), currency=p.get("cur", "RUB"), buyer_username=buyer)
-    err = _extend(api, rec, int(p["hours"]), chat_id, order) if api else "no_key"
-    if err:
-        with _lock:
-            PENDING[buyer] = p
-        _save("pending")
-        _send(chat_id, _t("problem"))
-        _notify(f"❌ Продление по «!прод» не прошло: {esc(_human(err, api))}", p.get("order"))
 
 
 _ext_busy: set = set()  # аренды, для которых сейчас создаётся лот продления
@@ -1295,10 +1231,9 @@ def _commands_text() -> str:
     word = S.get("ext_word") or "!продление"
     lines = ["• !код — код Steam Guard", "• !время — сколько осталось", "• !данные — логин и пароль ещё раз"]
     if S.get("ext_cmd"):
-        lines.append(f"• {word} 3 — продлить на 3 ч (или {word} 2д — на 2 дня)")
+        lines.append(f"• {word} 3 — продлить этот аккаунт на 3 ч (или {word} 2д — на 2 дня)")
     if S.get("buyer_cmds"):
         lines += ["• !кик — выкинуть всех чужих из аккаунта", "• !пароль — сменить пароль"]
-    lines += ["• !друг — следующая оплата выдаст второй аккаунт", "• !прод логин — какой аккаунт продлить, если их несколько"]
     return "\n".join(lines)
 
 
@@ -1340,21 +1275,12 @@ def _cmd_password(chat_id, buyer: str, arg: str):
         _change_password(api, rec, chat_id)
 
 
-def _cmd_friend(chat_id, buyer: str, _=""):
-    if _friend_on(buyer):
-        return _send(chat_id, _t("friend_already"))
-    _friend[buyer] = time.time()
-    _send(chat_id, _t("friend_on", minutes=S.get("friend_minutes", 10)))
-
-
 COMMANDS = [  # (синонимы, обработчик(chat_id, buyer, arg), включена ли)
     (("!код", "!code", "!гуард", "!guard", "!кодстим", "!sg"), _cmd_code, lambda: True),
     (("!время", "!срок", "!time"), lambda c, b, a: _cmd_time(c, b), lambda: True),
     (("!данные", "!логин", "!data", "!acc"), _cmd_creds, lambda: True),
     (("!помощь", "!команды", "!help", "!commands"), lambda c, b, a: _send(c, _t("help", commands=_commands_text())),
      lambda: True),
-    (("!друг", "!friend"), _cmd_friend, lambda: True),
-    (("!прод", "!prod"), _cmd_extend, lambda: True),
     (("!extend",), _cmd_ext_lot, lambda: S.get("ext_cmd")),
     (("!кик", "!kick", "!выкинуть"), lambda c, b, a: _bg(_cmd_kick, c, b, a), lambda: S.get("buyer_cmds")),
     (("!пароль", "!password", "!pass"), lambda c, b, a: _bg(_cmd_password, c, b, a), lambda: S.get("buyer_cmds")),
@@ -2137,11 +2063,10 @@ HELP = (
     "• <code>!продление 3</code> или <code>!продление 2д</code> — плагин создаёт временный лот на этот срок, "
     "оплата продлевает ту же аренду, лот удаляется\n"
     "• <code>!кик</code> — выкинуть чужие сессии Steam, <code>!пароль</code> — сменить пароль (новый придёт в чат)\n"
-    "• <code>!друг</code> — следующая оплата выдаст новый аккаунт, а не продлит текущий\n"
-    "• <code>!прод логин</code> — какой аккаунт продлить, если их несколько\n"
     "• <code>!помощь</code> — список команд\n\n"
     "<b>Время</b>: за заказ — часы привязки × количество. Лот на 1 час = почасовой: покупатель сам выбирает "
-    "число часов количеством. Повторная покупка продлевает тот же аккаунт.\n\n"
+    "число часов количеством. Каждая покупка выдаёт новый аккаунт; продлить текущий покупатель может только "
+    "командой <code>!продление</code> (если она включена).\n\n"
     "<b>Цены</b>: цена лота = цена MUVSell × (1 + наценка). Наценка берётся у привязки, иначе у категории, "
     "иначе глобальная. Лоты с автоценой пересчитываются сами.\n\n"
     "<b>Наличие</b>: пока на MUVSell нет свободных аккаунтов игры, её лоты сняты с продажи "
