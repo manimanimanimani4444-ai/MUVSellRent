@@ -38,12 +38,12 @@ if TYPE_CHECKING:
 
 # NAME / VERSION / DESCRIPTION / CHANGELOG / COMPAT / MAP_FILE — по одной строке: их читает сайт (/api/plugins)
 NAME = "MUVSell Rent"
-VERSION = "1.0.6"
+VERSION = "1.0.7"
 DESCRIPTION = "Перепродажа аренды Steam-аккаунтов MUVSell на FunPay: автовыдача, коды Steam Guard, продления, синхронизация наличия и цен, автовыставление лотов, статистика."
 CREDITS = "@MUVSell"
 UUID = "ce1c0a2b-f7df-4a0d-90d3-31012b5ab720"
 SETTINGS_PAGE = True
-CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их."
+CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их. 1.0.7: автовыставление в Steam «Аккаунты с играми» и в «Прочие игры» — любую игру, и ту, у которой на FunPay нет своего раздела: «Автовыставление» → «🎮 В Steam» / «🧩 В «Прочие игры»» → нажмите на игру, и она выставится на все сроки из «Длительностей» по тем же шаблонам (тип «Аренда», регион Steam настраивается); карточка игры тоже показывает сроки из «Длительностей»; при ошибке связи с MUVSell видна причина (таймаут, DNS, SSL, прокси); обновления плагина и карта разделов тоже идут через прокси из настроек."
 COMPAT = "FunPay Cardinal 0.1.17.15"
 MAP_FILE = "muvsell_funpay_map.json"
 
@@ -51,6 +51,9 @@ SITE = "https://muvsell.store"
 API_BASE = SITE + "/api/v1"
 INFO_URL = SITE + "/api/plugin/info"
 MAP_URL = SITE + "/downloads/" + MAP_FILE
+# Общие разделы: сюда реселлер сам выставляет любую игру — по кнопке, по лоту на срок (лимит FunPay — на все игры разом)
+MANUAL = {"steam": (89, "Steam «Аккаунты с играми»"), "other": (451, "«Прочие игры»")}
+STEAM_SUB = MANUAL["steam"][0]
 MIN_HOURS, MAX_HOURS = 1, 720  # границы одной аренды или продления на MUVSell
 TIMEOUT = 25
 UPDATE_EVERY = 1800            # проверка обновлений плагина, сек
@@ -214,6 +217,7 @@ DEFAULTS = {
     "ap_texts": {},
     "ap_own": None,             # своя наценка новых лотов, % (None — глобальная)
     "ap_active": True,
+    "steam_region": "Россия",   # регион лотов в Steam «Аккаунты с играми» — как в списке на FunPay
 }
 PARAMS = {  # ключ: (подпись, пояснение, дробное ли, экран возврата)
     "markup": ("Наценка, %", "Цена лота = цена MUVSell × (1 + наценка%). Действует на привязки без своей наценки "
@@ -235,13 +239,13 @@ PARAMS = {  # ключ: (подпись, пояснение, дробное ли
 PERIODS = {"today": "Сегодня", "yday": "Вчера", "7": "7 дней", "30": "30 дней", "90": "90 дней", "all": "Всё время"}
 
 S: dict = {}         # настройки
-MAPS: list = []      # привязки: {lot_id, subcat, titles, game_id, game, hours, auto, price, markup, reprice, autohide, bonus, off}
+MAPS: list = []      # привязки: {lot_id, subcat, titles, game_id, game, hours, auto, manual, price, markup, reprice, autohide, bonus, off}
 RENT: dict = {}      # ник покупателя (нижний регистр) → [аренды]
 HIDDEN: dict = {}    # lot_id → почему снят с продажи: stock | balance
 DONE: list = []      # обработанные заказы FunPay
 SALES: list = []     # журнал продаж: {ts, order, buyer, game_id, game, hours, lot, rid, rev, cost, kind, refunded}
 PROBLEMS: dict = {}  # lot_id → {n, err, until, missing, game}
-CREATED: dict = {}   # «игра:часы» → лот, созданный автовыставлением (чтобы не плодить дубли)
+CREATED: dict = {}   # «игра:часы» (ручные разделы — «steam:игра:часы») → лот, созданный плагином (чтобы не плодить дубли)
 EXT: dict = {}       # метка → временный лот продления: {lot_id, rid, buyer, chat, game_id, game, hours, price, until, map_lot}
 
 cardinal: "Cardinal | None" = None
@@ -446,7 +450,7 @@ HUMAN = {
     "bad_request": "MUVSell отклонил запрос",
     "wait": "слишком часто",
     "no_account": "аренда создана, но аккаунт не выдан — выдайте вручную с сайта",
-    "net": "нет связи с muvsell.store",
+    "net": "нет связи с muvsell.store (если не проходит — включите прокси: Настройки → «Прокси MUVSell»)",
 }
 
 
@@ -463,7 +467,7 @@ class Api:
             try:
                 r = self.s.request(method, API_BASE + path, json=body, timeout=TIMEOUT)
             except requests.RequestException as e:
-                self.error = str(e)[:200]
+                self.error = str(e)[-200:]  # причина (таймаут, DNS, SSL) — в конце текста requests
                 if method != "GET" or attempt == 2:
                     return None, "net"
                 time.sleep(2)
@@ -548,7 +552,7 @@ def _api() -> "Api | None":
 def _human(err, api=None) -> str:
     text = HUMAN.get(err, err or "неизвестная ошибка")
     detail = getattr(api, "error", "")
-    return f"{text}: {detail}" if detail and err != "net" else text
+    return f"{text}: {detail}" if detail else text
 
 
 def _balance(force: bool = False):
@@ -1496,13 +1500,13 @@ def _vt(v) -> tuple:
 def _check_update():
     """Скачивает новую версию плагина с muvsell.store; применится после перезапуска FPC."""
     try:
-        info = requests.get(INFO_URL, timeout=20).json()
+        info = requests.get(INFO_URL, timeout=20, proxies=_proxies()).json()
         ver = str(info.get("version") or "")
         if _vt(ver) <= _vt(VERSION) or ver == _state["update"]:
             return
         # .py отдаётся как application/octet-stream — кодировку не угадываем, файл всегда UTF-8
         code = requests.get(urljoin(SITE, info.get("download_url") or "/downloads/MUVSellRent.py"),
-                            timeout=60).content.decode("utf-8")
+                            timeout=60, proxies=_proxies()).content.decode("utf-8")
         if f'VERSION = "{ver}"' not in code or "BIND_TO_PRE_INIT" not in code:
             return log.warning(f"{LP} обновление v{ver}: скачан не плагин — пропускаю")
         shutil.copy2(SELF_PATH, SELF_PATH + ".bak")
@@ -1549,7 +1553,7 @@ def _fp_map(force: bool = False) -> dict:
     ts, data = _cache["map"]
     if force or not data or time.time() - ts > 3600:
         try:
-            r = requests.get(MAP_URL, timeout=TIMEOUT)
+            r = requests.get(MAP_URL, timeout=TIMEOUT, proxies=_proxies())
             fresh = r.json() if r.ok else None
             if isinstance(fresh, dict) and fresh.get("games"):
                 data = fresh
@@ -1576,20 +1580,26 @@ def _stale(m: dict) -> str:
     исправлена). → причина или ""."""
     if (PROBLEMS.get(str(m["lot_id"])) or {}).get("missing"):
         return "удалён с FunPay"
-    g = m.get("auto") and _fp_game(m["game_id"])
+    g = m.get("auto") and not m.get("manual") and _fp_game(m["game_id"])  # ручной раздел — вне раздела из карты
     if g and str(g["funpay"]["subcategory_id"]) != str(m.get("subcat")):
         return "в чужом разделе"
     return ""
 
 
 def _plan(durations=None) -> list:
-    have = {(m["game_id"], int(m["hours"])) for m in MAPS if not _stale(m)}
+    have = {(m["game_id"], int(m["hours"])) for m in MAPS if not _stale(m) and not m.get("manual")}
     return [(g, p, h) for g, p in _sellable() for h in durations or S["ap_durations"] if (g["game_id"], h) not in have]
 
 
-def _drop_stale(game_id: str, hours: int):
+def _ckey(g: dict, hours: int) -> str:
+    return f"{g['manual'] + ':' if g.get('manual') else ''}{g['game_id']}:{hours}"
+
+
+def _drop_stale(g: dict, hours: int):
     """Перед созданием заново: убираем старую привязку; лот плагина в чужом разделе ещё и удаляем с FunPay."""
-    stale = [x for x in MAPS if x["game_id"] == game_id and int(x["hours"]) == hours and _stale(x)]
+    game_id = g["game_id"]
+    stale = [x for x in MAPS if x["game_id"] == game_id and int(x["hours"]) == hours
+             and x.get("manual") == g.get("manual") and _stale(x)]
     if not stale:
         return
     for m in stale:
@@ -1602,7 +1612,7 @@ def _drop_stale(game_id: str, hours: int):
             MAPS[:] = [x for x in MAPS if x is not m]
             PROBLEMS.pop(str(m["lot_id"]), None)
             HIDDEN.pop(str(m["lot_id"]), None)
-            CREATED.pop(f"{game_id}:{hours}", None)
+            CREATED.pop(_ckey(g, hours), None)
     for name in ("mappings", "problems", "hidden", "created"):
         _save(name)
 
@@ -1702,8 +1712,16 @@ def _create_lot(sub: int, map_fields: dict, game: str, texts: tuple, price: int,
     before = {int(lot.id) for lot in acc.get_my_subcategory_lots(sub)}
     fields, selects = _new_lot_form(sub)
     fields.update({k: str(v) for k, v in (map_fields or {}).items() if v})
+    region = (S.get("steam_region") or "").strip().lower()
+    want = {"аренда", region} if sub == STEAM_SUB else set()  # Steam: тип и регион выбираем по тексту варианта
+    if want and not any(t.lower() == region for opts in selects.values() for _, t in opts):
+        regions = [t for opts in selects.values() if not any(t.lower() == "аренда" for _, t in opts) for v, t in opts if v]
+        return None, f"в форме FunPay нет региона «{S.get('steam_region')}», есть: {', '.join(regions[:15]) or '—'}"
     for name, opts in selects.items():
-        if fields.get(name) not in {v for v, _ in opts if v}:
+        hit = next((v for v, t in opts if v and t.lower() in want), None)
+        if hit:
+            fields[name] = hit
+        elif fields.get(name) not in {v for v, _ in opts if v}:
             fields[name] = _pick(opts, game)
     ru, en, desc_ru, desc_en = texts
     fields.update({"offer_id": "0", "node_id": str(sub), "fields[summary][ru]": ru, "fields[summary][en]": en,
@@ -1764,9 +1782,11 @@ def _finish_job(chat_id, msg_id, text: str, back: str = "ac"):
 def _new_map(g: dict, lot_id, hours: int, titles: list, price: int) -> dict:
     m = {"lot_id": str(lot_id), "subcat": int(g["funpay"]["subcategory_id"]), "titles": titles, "game_id": g["game_id"],
          "game": g["name"], "hours": hours, "auto": True, "price": price, "markup": S.get("ap_own")}
+    if g.get("manual"):
+        m["manual"] = g["manual"]
     with _lock:
         MAPS.append(m)
-        CREATED[f"{g['game_id']}:{hours}"] = {"lot_id": str(lot_id), "subcat": m["subcat"], "titles": titles}
+        CREATED[_ckey(g, hours)] = {"lot_id": str(lot_id), "subcat": m["subcat"], "titles": titles}
     _save("mappings")
     _save("created")
     return m
@@ -1781,10 +1801,10 @@ def _run_create(chat_id, msg_id, plan: list):
         _progress(chat_id, msg_id, "Создание лотов", i, len(plan), f"✅ {created} · ♻️ {restored} · ⏭ {skipped} · ❌ {failed}")
     try:
         for i, (g, prod, hours) in enumerate(plan, 1):
-            _drop_stale(g["game_id"], hours)  # лот удалён с FunPay или стоит в чужом разделе — создаём заново
+            _drop_stale(g, hours)  # лот удалён с FunPay или стоит в чужом разделе — создаём заново
             sub = int(g["funpay"]["subcategory_id"])
             price = _price(api, prod, hours, {"subcat": sub, "markup": S.get("ap_own")})
-            old = CREATED.get(f"{g['game_id']}:{hours}")
+            old = CREATED.get(_ckey(g, hours))
             if old and str(old.get("lot_id")) not in {str(m["lot_id"]) for m in MAPS}:
                 try:  # привязку удаляли, а лот на FunPay остался — возвращаем привязку, дубль не создаём
                     cardinal.account.get_lot_fields(int(old["lot_id"]))
@@ -1793,7 +1813,7 @@ def _run_create(chat_id, msg_id, plan: list):
                     step(i)
                     continue
                 except Exception:
-                    CREATED.pop(f"{g['game_id']}:{hours}", None)
+                    CREATED.pop(_ckey(g, hours), None)
             if sub not in counts:  # лимит — только на лоты плагина: ваши остальные лоты в разделе не мешают
                 counts[sub] = sum(1 for m in MAPS if m.get("auto") and str(m.get("subcat")) == str(sub))
             if counts[sub] >= cap:
@@ -2447,20 +2467,16 @@ def act_games_search_clear(call, *_):
     scr_games(call)
 
 
-def _durations(prod: dict) -> list:
-    return sorted({int(p["hours"]) for p in prod.get("prices") or [] if p.get("hours")}) or list(DEFAULTS["ap_durations"])
-
-
 def scr_game(call, game_id):
     prod = next((p for p in _products() or [] if p["id"] == game_id), None)
     if not prod:
         return scr_games(call)
     api, g = _api(), _fp_game(game_id)
     sub = int(g["funpay"]["subcategory_id"]) if g else None
-    have = {int(m["hours"]): m for m in MAPS if m["game_id"] == game_id}
+    have = {int(m["hours"]): m for m in MAPS if m["game_id"] == game_id and not m.get("manual")}
     pm = {"subcat": sub, "markup": S.get("ap_own")}
     lines, rows, row = [], [], []
-    for h in _durations(prod):
+    for h in S["ap_durations"]:
         price = _price(api, prod, h, pm)
         m = have.get(h)
         lines.append(f"{'🔗' if m else '🆕'} {_dur(h)}: {_rub(_cost(api, prod, h))} → <b>{price}₽</b>"
@@ -2471,9 +2487,11 @@ def scr_game(call, game_id):
             rows.append(row)
             row = []
     rows.append(row)
-    missing = sum(1 for h in _durations(prod) if h not in have)
+    missing = sum(1 for h in S["ap_durations"] if h not in have)
     _edit(call, f"🎮 <b>{esc(prod['name'])}</b>\n\n📦 Свободно аккаунтов: <b>{int(prod.get('inStock') or 0)}</b>\n"
-                f"🗂 Раздел FunPay: " + (f"<code>{sub}</code>" if g else "❌ нет в карте — создать лот нельзя, привяжите свой")
+                f"🗂 Раздел FunPay: " + (f"<code>{sub}</code>" if g else "❌ своего раздела нет — выставьте в Steam "
+                                                                        "или «Прочие игры» (🤖 Автовыставление) или "
+                                                                        "привяжите свой лот")
                 + f"\n➗ Наценка новых лотов: <b>{_num(_markup(pm))}%</b>\n\n<i>Срок: база MUVSell → цена лота</i>\n"
                 + "\n".join(lines),
           _kb(*(rows if g else []), [_btn(f"➕ Создать все недостающие ({missing})", f"gca:{game_id}")] if g and missing else None,
@@ -2486,11 +2504,69 @@ def act_game_create(call, arg):
     prod = next((p for p in _products() or [] if p["id"] == game_id), None)
     if not g or not prod:
         return _alert(call, "Для этой игры нет раздела FunPay — привяжите свой лот")
-    have = {int(m["hours"]) for m in MAPS if m["game_id"] == game_id}
-    todo = [h for h in (_durations(prod) if hours == "all" else [int(hours)]) if h not in have]
+    have = {int(m["hours"]) for m in MAPS if m["game_id"] == game_id and not m.get("manual")}
+    todo = [h for h in (S["ap_durations"] if hours == "all" else [int(hours)]) if h not in have]
     if not todo:
         return scr_game(call, game_id)
     _start_job(call, "Создание лотов", _run_create, [(g, prod, h) for h in todo])
+
+
+def _manual_game(prod: dict, kind: str) -> dict:
+    """Игра для общего раздела (Steam / «Прочие игры») — в формате записи карты."""
+    g = _fp_game(prod["id"])  # название из карты — по нему в «Прочих играх» выбирается игра в списке FunPay
+    return {"game_id": prod["id"], "name": (g or prod)["name"], "manual": kind,
+            "funpay": {"subcategory_id": MANUAL[kind][0], "fields": {}}}
+
+
+def _manual_todo(kind: str, game_id: str) -> list:
+    """Сроки из «Длительностей», на которые игры ещё нет в общем разделе."""
+    have = {int(m["hours"]) for m in MAPS if m["game_id"] == game_id and m.get("manual") == kind and not _stale(m)}
+    return [h for h in S["ap_durations"] if h not in have]
+
+
+def scr_manual(call, arg):
+    """Автовыставление в общий раздел (Steam / «Прочие игры»): нажали на игру — она выставляется на все сроки."""
+    kind, _, page = arg.partition(":")
+    if kind not in MANUAL:
+        return scr_ac(call)
+    prods = _products()
+    if prods is None:
+        return _edit(call, "🔑 Сначала задайте API-ключ (⚙️ Настройки) — без него каталог MUVSell не загрузить.", _kb(_back("ac")))
+    sub, label = MANUAL[kind]
+    items = sorted(prods, key=lambda p: (not int(p.get("inStock") or 0), p["name"].lower()))
+    page, chunk = _page(items, page or "0", 8)
+    total = len(S["ap_durations"])
+    rows = []
+    for p in chunk:
+        left = len(_manual_todo(kind, p["id"]))
+        rows.append([_btn(f"{'✅' if not left else '🔗' if left < total else '🆕'} {p['name'][:30]} · {total - left}/{total} "
+                          f"· {int(p.get('inStock') or 0)} акк.", f"gxc:{kind}:{p['id']}")])
+    in_sub = sum(1 for m in MAPS if m.get("auto") and str(m.get("subcat")) == str(sub))
+    _edit(call, f"🤖 <b>Автовыставление → {label}</b>\n\n"
+                + ("Общий раздел Steam, тип «Аренда». " if kind == "steam" else
+                   "Раздел «Аккаунты прочих игр», тип «Аренда». Игра выбирается в списке FunPay по названию, нет её "
+                   "там — «Другая игра». ")
+                + "Нажмите на игру — плагин сразу выставит её на все сроки из «Длительностей», по тем же шаблонам, "
+                  "что и обычное автовыставление. Лимит предложений в разделе общий на все игры — выбирайте только "
+                  "нужные игры.\n\n"
+                + (f"🌍 Регион лота: <b>{esc(S.get('steam_region') or '')}</b>\n" if kind == "steam" else "")
+                + f"⏱ Сроки: <code>{_durs(S['ap_durations'])}</code>\n"
+                  f"🔢 Лотов плагина в разделе: <b>{in_sub}</b> из {S['lot_cap']}\n"
+                  "🆕 — не выставлена · 🔗 — не на все сроки · ✅ — на все сроки; цифры — сколько сроков выставлено",
+          _kb(*rows, _nav(f"gx:{kind}", page, len(items), 8),
+              [_btn(f"🌍 Регион: {S.get('steam_region') or ''}"[:60], "gsr")] if kind == "steam" else None,
+              [_btn("⏱ Длительности", "apd"), _btn("📝 Тексты лотов", "apt")], _back("ac")))
+
+
+def act_game_manual_create(call, arg):
+    kind, _, game_id = arg.partition(":")
+    prod = next((p for p in _products() or [] if p["id"] == game_id), None)
+    if not prod or kind not in MANUAL:
+        return scr_ac(call)
+    todo = _manual_todo(kind, game_id)
+    if not todo:
+        return _alert(call, f"{prod['name']} уже выставлена на все сроки")
+    _start_job(call, "Создание лотов", _run_create, [(_manual_game(prod, kind), prod, h) for h in todo])
 
 
 def act_game_bind(call, game_id):
@@ -2935,7 +3011,7 @@ def scr_ac(call, *_):
     api = _api()
     prods = _products() if api else None
     warn = ("🔑 Сначала задайте API-ключ.\n\n" if not api else
-            "⛔️ MUVSell не отвечает или ключ неверный.\n\n" if prods is None else "")
+            f"⛔️ MUVSell не отвечает или ключ неверный: {esc(api.error or 'нет ответа')}\n\n" if prods is None else "")
     matched = len(_sellable()) if prods is not None else 0
     missing = len(_plan()) if prods is not None else 0
     own = S.get("ap_own")
@@ -2945,7 +3021,8 @@ def scr_ac(call, *_):
             f"🗺 Игр в карте: <b>{len(_fp_map().get('games', []))}</b>\n"
             f"🎯 Сопоставлено с каталогом MUVSell: <b>{matched}</b>\n"
             f"🆕 Недостающих лотов: <b>{missing}</b>\n♻️ Лотов без привязки (привязку удаляли): <b>{len(_orphans())}</b>\n"
-            f"🔁 Пересоздать (лот удалён с FunPay или стоит в чужом разделе): <b>{sum(1 for m in MAPS if _stale(m))}</b>\n\n"
+            f"🔁 Пересоздать (лот удалён с FunPay или стоит в чужом разделе): "
+            f"<b>{sum(1 for m in MAPS if _stale(m) and not m.get('manual'))}</b>\n\n"
             f"⏱ Длительности: <code>{_durs(S['ap_durations'])}</code>\n"
             f"🔢 Лимит на раздел: <b>{S['lot_cap']}</b>\n➗ Наценка новых лотов: <b>{mk}</b>\n"
             f"👁 Создавать активными: {_onoff(S['ap_active'])}\n\n"
@@ -2959,6 +3036,7 @@ def scr_ac(call, *_):
         [_btn(f"⏳ {_state['job']} — обновить", "ac")] if _state["job"] else None,
         [_btn(f"📋 Показать план ({missing})", "acp:0")],
         [_btn("🚀 Создать недостающие", "acgo")],
+        [_btn("🎮 В Steam «Аккаунты с играми»", "gx:steam:0"), _btn("🧩 В «Прочие игры»", "gx:other:0")],
         [_btn("📝 Тексты лотов (название/описание)", "apt")],
         [_btn("✏️ Переписать тексты у существующих лотов", "aprw")],
         [_btn("⏱ Длительности", "apd"), _btn(f"🔢 Лимит ({S['lot_cap']})", "p:lot_cap")],
@@ -3055,7 +3133,8 @@ def _ap_preview(field: str) -> str:
 
 def scr_ap_texts(call, *_):
     _edit(call, "📝 <b>Тексты создаваемых лотов</b>\n\nЗдесь задаются шаблоны названия и описания, по которым "
-                "автовыставление создаёт лоты.\n\n🔤 <b>Переменные</b> (подставляются автоматически):\n"
+                "автовыставление создаёт лоты — обычное, в Steam и в «Прочие игры».\n\n🔤 <b>Переменные</b> "
+                "(подставляются автоматически):\n"
                 "• <code>{game}</code> — название игры\n• <code>{time}</code> — срок аренды (напр. «1 день», «3 часа»)\n\n"
                 "⚠️ <b>Лимиты FunPay:</b>\n• Название (краткое описание) — желательно ≤ 70 символов, иначе FunPay "
                 "обрежет (EN режется автоматически).\n• Английское описание не должно быть коротким — минимум "
@@ -3111,6 +3190,10 @@ ACTIONS = {
     "cg": scr_games, "cgs": lambda call, *_: _ask(call, "gamesearch", "🔍 Введите часть названия игры:", "cg:0"),
     "cgx": act_games_search_clear, "gm": scr_game, "gc": act_game_create,
     "gca": lambda call, gid: act_game_create(call, f"{gid}:all"), "gb": act_game_bind,
+    "gx": scr_manual, "gxc": act_game_manual_create,
+    "gsr": lambda call, *_: _ask(call, "stregion", "🌍 <b>Регион лотов в Steam «Аккаунты с играми»</b>\n\n"
+                                                  "Напишите регион точно как в списке FunPay "
+                                                  "(напр. <code>Россия</code>):", "gx:steam:0"),
     "rl": scr_rentals, "rn": scr_rental, "rc": act_rental_code, "rk": act_rental_kick, "rp": act_rental_password,
     "rx": act_rental_extend, "rtm": act_rental_terminate, "rty": act_rental_terminate_yes,
     "st": scr_stats, "sx": scr_stats_detail, "pr": scr_profit,
@@ -3327,11 +3410,20 @@ def in_ap_own(uid, text, _):
     return f"✅ Своя наценка новых лотов: {_num(value)}%.", [_back("ac")], None
 
 
+def in_steam_region(uid, text, _):
+    if not text.strip():
+        return "❌ Пустой регион.", [_back("gx:steam:0")], None
+    S["steam_region"] = text.strip()
+    _save("settings")
+    return (f"✅ Регион лотов в Steam: <b>{esc(S['steam_region'])}</b>. Если на FunPay такого нет — при выставлении "
+            "плагин покажет список доступных.", [_back("gx:steam:0")], None)
+
+
 INPUTS = {
     "key": in_key, "hours": in_hours, "mapmk": in_map_markup, "lot": in_lot, "search": in_search,
     "mapsearch": in_map_search, "gamesearch": in_game_search, "newmap": in_newmap, "param": in_param,
     "catmk": in_cat_markup, "proxy": in_proxy, "rext": in_rental_extend, "extword": in_ext_word, "text": in_text,
-    "aptext": in_ap_text, "apdur": in_ap_durations, "apown": in_ap_own,
+    "aptext": in_ap_text, "apdur": in_ap_durations, "apown": in_ap_own, "stregion": in_steam_region,
 }
 
 
