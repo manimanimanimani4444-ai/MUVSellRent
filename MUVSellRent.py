@@ -38,12 +38,12 @@ if TYPE_CHECKING:
 
 # NAME / VERSION / DESCRIPTION / CHANGELOG / COMPAT / MAP_FILE — по одной строке: их читает сайт (/api/plugins)
 NAME = "MUVSell Rent"
-VERSION = "1.0.9"
+VERSION = "1.1.0"
 DESCRIPTION = "Перепродажа аренды Steam-аккаунтов MUVSell на FunPay: автовыдача, коды Steam Guard, продления, синхронизация наличия и цен, автовыставление лотов, статистика."
 CREDITS = "@MUVSell"
 UUID = "ce1c0a2b-f7df-4a0d-90d3-31012b5ab720"
 SETTINGS_PAGE = True
-CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их. 1.0.7: автовыставление в Steam «Аккаунты с играми» и в «Прочие игры» — любую игру, и ту, у которой на FunPay нет своего раздела: «Автовыставление» → «🎮 В Steam» / «🧩 В «Прочие игры»» → нажмите на игру, и она выставится на все сроки из «Длительностей» по тем же шаблонам (тип «Аренда», регион Steam настраивается); карточка игры тоже показывает сроки из «Длительностей»; при ошибке связи с MUVSell видна причина (таймаут, DNS, SSL, прокси); обновления плагина и карта разделов тоже идут через прокси из настроек. 1.0.8: в «Прочие игры» — только игры без своего раздела на FunPay (остальные выставляет обычное автовыставление). 1.0.9: свою команду для кода Steam Guard можно задать в «⚙️ Прочее» (любое слово, можно без «!») — если на !код у вас отвечает ещё и другой плагин. У каждой привязки теперь свой ID (rentM-1001): плагин сам дописывает его в конец описания лота и находит оплаченный лот по нему, а не только по названию — одинаковые или переименованные лоты больше не путаются."
+CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их. 1.0.7: автовыставление в Steam «Аккаунты с играми» и в «Прочие игры» — любую игру, и ту, у которой на FunPay нет своего раздела: «Автовыставление» → «🎮 В Steam» / «🧩 В «Прочие игры»» → нажмите на игру, и она выставится на все сроки из «Длительностей» по тем же шаблонам (тип «Аренда», регион Steam настраивается); карточка игры тоже показывает сроки из «Длительностей»; при ошибке связи с MUVSell видна причина (таймаут, DNS, SSL, прокси); обновления плагина и карта разделов тоже идут через прокси из настроек. 1.0.8: в «Прочие игры» — только игры без своего раздела на FunPay (остальные выставляет обычное автовыставление). 1.0.9: свою команду для кода Steam Guard можно задать в «⚙️ Прочее» (любое слово, можно без «!») — если на !код у вас отвечает ещё и другой плагин. У каждой привязки теперь свой ID (rentM-1001): плагин сам дописывает его в конец описания лота и находит оплаченный лот по нему, а не только по названию — одинаковые или переименованные лоты больше не путаются. 1.1.0: ответы покупателю на английском — кто пишет английские команды (!code, !help, !time…), тому плагин отвечает по-английски: коды, время, продления, предупреждения и следующая выдача; в сообщении с выдачей — строка «🇬🇧 English? Type !help». Выключается в «⚙️ Прочее»."
 COMPAT = "FunPay Cardinal 0.1.17.15"
 MAP_FILE = "muvsell_funpay_map.json"
 
@@ -117,6 +117,48 @@ TEXTS = {  # сообщения покупателю в чат FunPay и тек�
     "ext_desc_en": ("Personal offer to extend your {game} rental for {time}. After payment the time is added to the same "
                     "account automatically - login and password stay the same. This offer was created on your request "
                     "and will be removed after payment."),
+}
+TEXTS_EN = {  # те же сообщения для покупателей, которые пишут английские команды (!code, !help…)
+    "delivery": ("🎮 {game} — your account is ready!\n\n"
+                 "👤 Login: {login}\n🔑 Password: {password}\n"
+                 "⏳ Time: {hours} h — until {expires}\n\n"
+                 "🔐 Steam Guard code — {guard}\n⌛ Time left — !time\n📋 All commands — !help\n\n"
+                 "🔄 Extend this account: {word} 3 — for 3 h, {word} 2d — for 2 days.\n"
+                 "🛒 Buying the lot again gives you a different account. Have fun! 🎯"),
+    "extended": ("✅ Done! Your {game} rental is extended by {hours} h.\n"
+                 "👤 Same account: {login} — log in as before.\n🕒 Play until {expires}"),
+    "ext_usage": ("🔄 How to extend: type {word} and the time in hours or days.\n"
+                  "For example: {word} 3 or {word} 2d\nSeveral accounts? Add the login: {word} 3 login"),
+    "ext_lot_ready": ("🧾 An extension offer was created just for you!\n\n"
+                      "🎮 {game} · +{time}\n💰 To pay: {price} ₽\n👉 {link}\n\n"
+                      "⏱ The offer is available for {minutes} min. After payment the time is added to {login} "
+                      "automatically."),
+    "ext_lot_fail": ("😔 Couldn't create the extension offer right now.\n"
+                     "Please try again in a couple of minutes — the seller has been notified. Buying the main lot "
+                     "gives you a new account, it doesn't extend this one."),
+    "review_offer": ("🎁 A small gift: leave a {stars}★ review for this order and we'll add {bonus} h to your rental "
+                     "for free while it's active."),
+    "review_bonus": "💚 Thanks for the review! Your {login} rental is extended by {hours} h as a gift.\n🕒 Play until {expires}",
+    "kick_ok": ("🚪 Done — all other sessions on {login} are being closed (usually within a minute).\n"
+                "Your {game} rental continues, just log in again."),
+    "kick_fail": "⚠️ Couldn't end the sessions on {login}. Please try again later or contact the seller.",
+    "pass_wait": "🔑 Changing the password on {login}… I'll send the new one here in 1–3 minutes.",
+    "pass_ok": ("🔐 Password updated!\n\n🎮 {game}\n👤 Login: {login}\n🔑 New password: {password}\n\n"
+                "Your rental time hasn't changed. Steam Guard code — {guard}"),
+    "pass_fail": "⚠️ Couldn't change the password on {login}. The seller has been notified and will help.",
+    "code": "🔐 Steam Guard code for {login}: {code}\n⏱ Valid for ~{ttl} more sec. — enter it right away.",
+    "code_which": "👥 You have several accounts — please add the login: {cmd} login\n{logins}",
+    "code_fail": "⚠️ Can't get the code right now — the seller has been notified and will help manually.",
+    "time_left": "⌛ {game} ({login}): {left} left — until {expires}",
+    "creds": "👤 {game}\nLogin: {login}\nPassword: {password}\n🕒 Until {expires}",
+    "help": "📋 Commands for your rental:\n{commands}",
+    "warn": ("⏳ Your {game} rental ({login}) ends in {left} ({expires}).\n"
+             "To extend this account, type {word} and the time, e.g. {word} 3.\n"
+             "Buying the lot again gives you a different account."),
+    "ended": ("🏁 Your {game} rental ({login}) has ended — access to the account is closed.\n"
+              "Thanks for choosing us! If you enjoyed it, we'd love a review 💚"),
+    "no_rental": "🔎 I don't see an active rental for you. If you've just paid, wait a minute and try again.",
+    "problem": "⚠️ Auto-delivery failed — the seller has been notified and will deliver manually soon. Thanks for your patience!",
 }
 TEXT_LABELS = {
     "delivery": "🎮 Выдача аккаунта", "extended": "🔄 Аренда продлена (после оплаты)",
@@ -200,6 +242,7 @@ DEFAULTS = {
     "ext_cmd": True,            # !продление N — временный лот на N часов
     "ext_word": "!продление",
     "code_word": "!код",        # своя команда кода Steam Guard — если на !код отвечает ещё и другой плагин
+    "en_msgs": True,            # отвечать по-английски тем, кто пишет английские команды (!code, !help…)
     "ext_minutes": 10,          # сколько живёт временный лот продления
     "buyer_cmds": True,         # !кик и !пароль
     "bonus_hours": 2,
@@ -352,9 +395,30 @@ def _is_cmd(text) -> bool:
     return text.startswith("!") or text.partition(" ")[0] == _code_word()
 
 
-def _t(key: str, **kw) -> str:
-    text = (S.get("texts") or {}).get(key) or TEXTS[key]
-    kw.setdefault("guard", _code_word())
+def _lang(who) -> str:
+    """Язык покупателя: «en», если последней он писал английскую команду (!code, !help…), иначе «ru».
+    who — ник покупателя или запись аренды."""
+    if not S.get("en_msgs"):
+        return "ru"
+    if not isinstance(who, dict):
+        who = (RENT.get(str(who or "").lower()) or [{}])[-1]
+    return "en" if who.get("lang") == "en" else "ru"
+
+
+def _set_lang(buyer: str, cmd: str):
+    lang = "en" if re.fullmatch(r"!?[a-z]+", cmd) else "ru"
+    changed = [r for r in RENT.get(buyer, []) if r.get("lang", "ru") != lang]
+    for r in changed:
+        r["lang"] = lang
+    if changed:
+        _save("rentals")
+
+
+def _t(key: str, lang: str = "ru", **kw) -> str:
+    text = (TEXTS_EN.get(key) if lang == "en" else None) or (S.get("texts") or {}).get(key) or TEXTS[key]
+    kw.setdefault("guard", "!code" if lang == "en" and _code_word() == "!код" else _code_word())
+    if lang == "en":
+        kw["word"] = "!extend"
     for k, v in kw.items():
         text = text.replace("{" + k + "}", str(v))
     return text
@@ -371,9 +435,9 @@ def _tz():
     return timezone(timedelta(hours=int(S.get("tz", 3) or 0)))
 
 
-def _when(ts: float) -> str:
+def _when(ts: float, lang: str = "ru") -> str:
     off = int(S.get("tz", 3) or 0)
-    label = "МСК" if off == 3 else f"UTC{off:+d}"
+    label = ("MSK" if lang == "en" else "МСК") if off == 3 else f"UTC{off:+d}"
     return datetime.fromtimestamp(ts, _tz()).strftime("%d.%m.%Y %H:%M ") + label
 
 
@@ -414,12 +478,14 @@ def _left(sec: float) -> str:
     return f"{d}д {h}ч" if d else f"{h}ч {m}м" if h else f"{m}м"
 
 
-def _left_text(sec: float) -> str:
-    """Для покупателя: «2 дня 3 ч.», «5 ч. 10 мин.», «45 мин.»."""
+def _left_text(sec: float, lang: str = "ru") -> str:
+    """Для покупателя: «2 дня 3 ч.», «5 ч. 10 мин.», «45 мин.» / «2 days 3 h», «45 min»."""
     m = max(1, int(sec // 60))
     d, h, m = m // 1440, m % 1440 // 60, m % 60
-    parts = ([f"{d} " + _plural(d, "день", "дня", "дней")] if d else []) + ([f"{h} ч."] if h else []) \
-        + ([f"{m} мин."] if m and not d else [])
+    en = lang == "en"
+    days = f"{d} day" + ("s" if d > 1 else "") if en else f"{d} " + _plural(d, "день", "дня", "дней")
+    parts = ([days] if d else []) + ([f"{h} h" if en else f"{h} ч."] if h else []) \
+        + ([f"{m} min" if en else f"{m} мин."] if m and not d else [])
     return " ".join(parts)
 
 
@@ -958,7 +1024,7 @@ def _new_rental(api: Api, m: dict, order, hours: int):
         return None, "no_account"
     rec = {"id": rental["id"], "number": rental.get("number"), "game_id": m["game_id"], "game": m["game"],
            "login": acc.get("login", ""), "exp": _ts(rental.get("endsAt")), "order": order.id, "buyer": buyer,
-           "chat": order.chat_id, "lot": m.get("lot_id"), "bonus": False, "ended": False}
+           "chat": order.chat_id, "lot": m.get("lot_id"), "bonus": False, "ended": False, "lang": _lang(buyer)}
     with _lock:
         RENT.setdefault(buyer.lower(), []).append(rec)
     _save("rentals")
@@ -966,10 +1032,13 @@ def _new_rental(api: Api, m: dict, order, hours: int):
     if err:
         _notify(f"⚠️ Выдано {first + extra} ч из {hours}: продление не прошло — {esc(_human(err, api))}", order.id)
     _sale("new", rec, first + extra, float(rental.get("totalRub") or 0) + extra_cost, order)
-    _send(order.chat_id, _t("delivery", game=m["game"], login=rec["login"], password=acc.get("password", ""),
-                            hours=first + extra, expires=_when(rec["exp"]), word=S.get("ext_word") or "!продление"))
+    lang = rec["lang"]
+    hint = "\n\n🇬🇧 English? Type !help" if lang == "ru" and S.get("en_msgs") else ""
+    _send(order.chat_id, _t("delivery", lang, game=m["game"], login=rec["login"], password=acc.get("password", ""),
+                            hours=first + extra, expires=_when(rec["exp"], lang),
+                            word=S.get("ext_word") or "!продление") + hint)
     if _bonus_on(m) and sum(1 for s in SALES if s.get("order") == order.id) == 1:  # одно предложение на заказ
-        _send(order.chat_id, _t("review_offer", bonus=S.get("bonus_hours"), stars=S.get("bonus_stars")))
+        _send(order.chat_id, _t("review_offer", lang, bonus=S.get("bonus_hours"), stars=S.get("bonus_stars")))
     _notify(f"✅ Выдан <code>{esc(rec['login'])}</code> — {esc(m['game'])}, {first + extra} ч → "
             f"<b>{esc(buyer)}</b> (аренда №{rec['number']})", order.id, cat="sales")
     return rec, None
@@ -985,14 +1054,15 @@ def _extend(api: Api, rec: dict, hours: int, chat_id, order=None, text: str = "e
     if err:
         _notify(f"⚠️ Продлено {added} ч из {hours} — {esc(_human(err, api))}", order_id)
     _sale(kind, rec, added, cost, None if isinstance(order, (str, type(None))) else order)
-    _send(chat_id, _t(text, login=rec["login"], game=rec["game"], hours=added, expires=_when(rec["exp"])))
+    lang = _lang(rec)
+    _send(chat_id, _t(text, lang, login=rec["login"], game=rec["game"], hours=added, expires=_when(rec["exp"], lang)))
     if kind == "ext":
         _notify(f"✅ Продлён <code>{esc(rec['login'])}</code> — {esc(rec['game'])}, +{added} ч", order_id, cat="sales")
     return None
 
 
 def _fail(order, err, api=None, m=None):
-    _send(order.chat_id, _t("problem"))
+    _send(order.chat_id, _t("problem", _lang(order.buyer_username)))
     refund = bool(S.get("auto_refund")) and err in ("no_stock", "balance")
     _notify(f"❌ Не удалось выдать аренду: {esc(_human(err, api))}" + ("\n💸 Оформляю возврат." if refund else ""),
             order.id)
@@ -1011,7 +1081,7 @@ def _process(order):
     if not found:
         return  # не наш лот — обычный заказ FunPay
     if len(found) > 1:
-        _send(order.chat_id, _t("problem"))
+        _send(order.chat_id, _t("problem", _lang(order.buyer_username)))
         return _notify("⚠️ Заказ подходит под несколько привязок с разными играми или сроками — выдайте вручную и "
                        "сделайте названия лотов разными:\n" + "\n".join(f"• {esc(_mlabel(m))} — лот {m['lot_id']}"
                                                                           for m in found), order.id)
@@ -1047,7 +1117,7 @@ def on_new_order(c: "Cardinal", event):
         _process(order)
     except Exception as e:
         log.exception(f"{LP} заказ {order.id}")
-        _send(order.chat_id, _t("problem"))
+        _send(order.chat_id, _t("problem", _lang(getattr(order, "buyer_username", ""))))
         _notify(f"⚠️ Ошибка при обработке заказа: <code>{esc(str(e)[:200])}</code>", order.id)
 
 
@@ -1084,11 +1154,13 @@ def _guard(api: Api, rec: dict):
 
 
 def _pick_rec(chat_id, buyer: str, arg: str, cmd: str):
-    rs = [r for r in _active(buyer) if not arg or r["login"].lower() == arg.lower()]
+    rs, lang = [r for r in _active(buyer) if not arg or r["login"].lower() == arg.lower()], _lang(buyer)
     if not rs:
-        return _send(chat_id, _t("no_rental"))
+        return _send(chat_id, _t("no_rental", lang))
     if len(rs) > 1:
-        return _send(chat_id, _t("code_which", cmd=cmd, logins="\n".join(f"• {r['login']}" for r in rs)))
+        if lang == "en":
+            cmd = {"!код": "!code", "!кик": "!kick", "!пароль": "!password"}.get(cmd, "!extend 3" if cmd.endswith(" 3") else cmd)
+        return _send(chat_id, _t("code_which", lang, cmd=cmd, logins="\n".join(f"• {r['login']}" for r in rs)))
     return rs[0]
 
 
@@ -1102,11 +1174,11 @@ def _cmd_code(chat_id, buyer: str, arg: str):
         time.sleep(int(code["expiresIn"]) + 1)
         code = _guard(api, rec)
     if not code:
-        _send(chat_id, _t("code_fail"))
+        _send(chat_id, _t("code_fail", _lang(buyer)))
         return _notify(f"⚠️ Не удалось получить код Steam Guard для <code>{esc(rec['login'])}</code>: "
                        f"{esc(_human('no_key') if not api else api.error or 'у аккаунта нет maFile')}", rec.get("order"),
                        dedup=f"code:{rec['id']}")
-    _send(chat_id, _t("code", login=rec["login"], code=code["code"], ttl=code.get("expiresIn", 30)))
+    _send(chat_id, _t("code", _lang(buyer), login=rec["login"], code=code["code"], ttl=code.get("expiresIn", 30)))
 
 
 _ext_busy: set = set()  # аренды, для которых сейчас создаётся лот продления
@@ -1126,8 +1198,9 @@ def _ext_texts(game: str, hours: int, tag: str):
 
 
 def _ext_ready(rec: dict, e: dict) -> str:
-    return _t("ext_lot_ready", game=rec["game"], login=rec["login"], time=_dur(int(e["hours"])), hours=e["hours"],
-              price=e["price"], link=f"https://funpay.com/lots/offer?id={e['lot_id']}",
+    lang = _lang(rec)
+    return _t("ext_lot_ready", lang, game=rec["game"], login=rec["login"], time=_dur(int(e["hours"]), lang),
+              hours=e["hours"], price=e["price"], link=f"https://funpay.com/lots/offer?id={e['lot_id']}",
               minutes=max(1, math.ceil((e["until"] - time.time()) / 60)))
 
 
@@ -1158,7 +1231,7 @@ def _cmd_ext_lot(chat_id, buyer: str, arg: str):
     m = _map_by_lot(rec.get("lot")) or next((x for x in MAPS if x["game_id"] == rec["game_id"]), None)
     hours = _one_hours(spans[0]) if spans else int((m or {}).get("hours") or 0)
     if not hours:
-        return _send(chat_id, _t("ext_usage", word=word))
+        return _send(chat_id, _t("ext_usage", _lang(buyer), word=word))
     same = next((e for e in EXT.values() if e["rid"] == rec["id"] and int(e["hours"]) == hours
                  and e["until"] > time.time() + 60), None)
     if same:  # лот на этот срок уже ждёт оплату — повторяем ссылку
@@ -1186,7 +1259,7 @@ def _make_ext_lot(chat_id, buyer: str, rec: dict, m, hours: int):
             except Exception as e:
                 err = _fp_error(e)
         if not lot_id:
-            _send(chat_id, _t("ext_lot_fail"))
+            _send(chat_id, _t("ext_lot_fail", _lang(buyer)))
             return _notify(f"❌ Лот продления для <b>{esc(buyer)}</b> ({esc(rec['game'])}, {_dur(hours)}) не создан: "
                            f"{esc(str(err))}", rec.get("order"))
         e = {"lot_id": str(lot_id), "rid": rec["id"], "buyer": buyer, "chat": chat_id, "game_id": rec["game_id"],
@@ -1238,31 +1311,41 @@ def _cmd_kick(chat_id, buyer: str, arg: str):
         return
     _, err = api.kick(rec["id"])
     if err:
-        return _send(chat_id, _t("kick_fail", login=rec["login"], reason=api.error or _human(err)))
-    _send(chat_id, _t("kick_ok", login=rec["login"], game=rec["game"]))
+        return _send(chat_id, _t("kick_fail", _lang(buyer), login=rec["login"], reason=api.error or _human(err)))
+    _send(chat_id, _t("kick_ok", _lang(buyer), login=rec["login"], game=rec["game"]))
     _notify(f"🚪 <b>{esc(buyer)}</b> выкинул сессии <code>{esc(rec['login'])}</code>.", rec.get("order"), cat="commands")
 
 
 def _cmd_time(chat_id, buyer: str):
-    rs = _active(buyer)
+    rs, lang = _active(buyer), _lang(buyer)
     if not rs:
-        return _send(chat_id, _t("no_rental"))
-    _send(chat_id, "\n".join(_t("time_left", game=r["game"], login=r["login"], left=_left_text(r["exp"] - time.time()),
-                                expires=_when(r["exp"])) for r in rs))
+        return _send(chat_id, _t("no_rental", lang))
+    _send(chat_id, "\n".join(_t("time_left", lang, game=r["game"], login=r["login"],
+                                left=_left_text(r["exp"] - time.time(), lang), expires=_when(r["exp"], lang))
+                             for r in rs))
 
 
 def _cmd_creds(chat_id, buyer: str, arg: str):
-    rs = [r for r in _active(buyer) if not arg or r["login"].lower() == arg.lower()]
+    rs, lang = [r for r in _active(buyer) if not arg or r["login"].lower() == arg.lower()], _lang(buyer)
     if not rs:
-        return _send(chat_id, _t("no_rental"))
+        return _send(chat_id, _t("no_rental", lang))
     api = _api()
     for r in rs:
         pw = _acc_of(api.rental(r["id"])[0], r["login"]).get("password") if api else None
-        _send(chat_id, _t("creds", game=r["game"], login=r["login"], password=pw or "— напишите продавцу",
-                          expires=_when(r["exp"])))
+        _send(chat_id, _t("creds", lang, game=r["game"], login=r["login"],
+                          password=pw or ("— ask the seller" if lang == "en" else "— напишите продавцу"),
+                          expires=_when(r["exp"], lang)))
 
 
-def _commands_text() -> str:
+def _commands_text(lang: str = "ru") -> str:
+    if lang == "en":
+        lines = [f"• {'!code' if _code_word() == '!код' else _code_word()} — Steam Guard code", "• !time — time left",
+                 "• !data — login and password again"]
+        if S.get("ext_cmd"):
+            lines.append("• !extend 3 — extend this account by 3 h (or !extend 2d — by 2 days)")
+        if S.get("buyer_cmds"):
+            lines += ["• !kick — kick everyone else out of the account", "• !password — change the password"]
+        return "\n".join(lines)
     word = S.get("ext_word") or "!продление"
     lines = [f"• {_code_word()} — код Steam Guard", "• !время — сколько осталось", "• !данные — логин и пароль ещё раз"]
     if S.get("ext_cmd"):
@@ -1280,13 +1363,14 @@ def _acc_of(data, login: str) -> dict:
 
 def _change_password(api: Api, rec: dict, chat_id) -> "str | None":
     """Запускает смену пароля и в фоне ждёт новый, чтобы прислать покупателю. → текст ошибки или None."""
+    lang = _lang(rec)
     old = _acc_of(api.rental(rec["id"])[0], rec["login"]).get("password")
     _, err = api.change_password(rec["id"])
     if err:
         reason = api.error or _human(err)
-        _send(chat_id, _t("pass_fail", login=rec["login"], reason=reason))
+        _send(chat_id, _t("pass_fail", lang, login=rec["login"], reason=reason))
         return reason
-    _send(chat_id, _t("pass_wait", login=rec["login"]))
+    _send(chat_id, _t("pass_wait", lang, login=rec["login"]))
 
     def wait():
         for _ in range(30):
@@ -1294,10 +1378,10 @@ def _change_password(api: Api, rec: dict, chat_id) -> "str | None":
                 return
             pw = _acc_of(api.rental(rec["id"])[0], rec["login"]).get("password")
             if pw and pw != old:
-                _send(chat_id, _t("pass_ok", game=rec["game"], login=rec["login"], password=pw))
+                _send(chat_id, _t("pass_ok", lang, game=rec["game"], login=rec["login"], password=pw))
                 return _notify(f"🔑 Пароль <code>{esc(rec['login'])}</code> сменён, новый отправлен покупателю.",
                                rec.get("order"), cat="commands")
-        _send(chat_id, _t("pass_fail", login=rec["login"], reason="смена затянулась, продавец уже уведомлён"))
+        _send(chat_id, _t("pass_fail", lang, login=rec["login"], reason="смена затянулась, продавец уже уведомлён"))
         _notify(f"⚠️ Смена пароля <code>{esc(rec['login'])}</code> не завершилась за 5 минут — проверьте на сайте.",
                 rec.get("order"))
     _bg(wait)
@@ -1310,12 +1394,16 @@ def _cmd_password(chat_id, buyer: str, arg: str):
         _change_password(api, rec, chat_id)
 
 
+def _cmd_help(chat_id, buyer: str, arg: str):
+    lang = _lang(buyer)
+    _send(chat_id, _t("help", lang, commands=_commands_text(lang)))
+
+
 COMMANDS = [  # (синонимы, обработчик(chat_id, buyer, arg), включена ли)
     (("!код", "!code", "!гуард", "!guard", "!кодстим", "!sg"), _cmd_code, lambda: _code_word() == "!код"),
     (("!время", "!срок", "!time"), lambda c, b, a: _cmd_time(c, b), lambda: True),
     (("!данные", "!логин", "!data", "!acc"), _cmd_creds, lambda: True),
-    (("!помощь", "!команды", "!help", "!commands"), lambda c, b, a: _send(c, _t("help", commands=_commands_text())),
-     lambda: True),
+    (("!помощь", "!команды", "!help", "!commands"), _cmd_help, lambda: True),
     (("!extend",), _cmd_ext_lot, lambda: S.get("ext_cmd")),
     (("!кик", "!kick", "!выкинуть"), lambda c, b, a: _bg(_cmd_kick, c, b, a), lambda: S.get("buyer_cmds")),
     (("!пароль", "!password", "!pass"), lambda c, b, a: _bg(_cmd_password, c, b, a), lambda: S.get("buyer_cmds")),
@@ -1330,12 +1418,14 @@ def _on_command(chat_id, buyer, text: str):
     if buyer not in RENT:  # плагин ничего ему не выдавал — молчим: на !код может отвечать другой плагин аренды
         return
     if cmd == _code_word():
-        return _cmd_code(chat_id, buyer, arg)
-    if S.get("ext_cmd") and cmd == str(S.get("ext_word") or "!продление").lower():
-        return _cmd_ext_lot(chat_id, buyer, arg)
-    for names, handler, enabled in COMMANDS:
-        if cmd in names and enabled():
-            return handler(chat_id, buyer, arg)
+        handler = _cmd_code
+    elif S.get("ext_cmd") and cmd == str(S.get("ext_word") or "!продление").lower():
+        handler = _cmd_ext_lot
+    else:
+        handler = next((h for names, h, enabled in COMMANDS if cmd in names and enabled()), None)
+    if handler:
+        _set_lang(buyer, cmd)  # английская команда — дальше отвечаем ему по-английски, русская — по-русски
+        handler(chat_id, buyer, arg)
 
 
 def _on_review(msg):
@@ -1527,8 +1617,9 @@ def _end_notices():
             if 0 < left <= float(S.get("warn_min") or 0) * 60 and not r.get("warned"):
                 r["warned"] = True
                 _save("rentals")
-                _send(r.get("chat"), _t("warn", game=r["game"], login=r["login"], left=_left_text(left),
-                                        minutes=max(1, int(left // 60)), expires=_when(r["exp"]),
+                lang = _lang(r)
+                _send(r.get("chat"), _t("warn", lang, game=r["game"], login=r["login"], left=_left_text(left, lang),
+                                        minutes=max(1, int(left // 60)), expires=_when(r["exp"], lang),
                                         word=S.get("ext_word") or "!продление"))
             if left > 0:
                 continue
@@ -1542,7 +1633,7 @@ def _end_notices():
             r["ended"] = True
             _save("rentals")
             if S.get("notify_end"):
-                _send(r.get("chat"), _t("ended", game=r["game"], login=r["login"]))
+                _send(r.get("chat"), _t("ended", _lang(r), game=r["game"], login=r["login"]))
             _notify(f"⌛️ Аренда закончилась: <code>{esc(r['login'])}</code> — {esc(r['game'])} "
                     f"({esc(r.get('buyer') or key)})", cat="ended")
 
@@ -2156,7 +2247,9 @@ HELP = (
     "• <code>!продление 3</code> или <code>!продление 2д</code> — плагин создаёт временный лот на этот срок, "
     "оплата продлевает ту же аренду, лот удаляется\n"
     "• <code>!кик</code> — выкинуть чужие сессии Steam, <code>!пароль</code> — сменить пароль (новый придёт в чат)\n"
-    "• <code>!помощь</code> — список команд\n\n"
+    "• <code>!помощь</code> — список команд\n"
+    "🇬🇧 Кто пишет английские команды (<code>!code</code>, <code>!help</code>…), тому плагин отвечает по-английски "
+    "(выключается в «⚙️ Прочее»).\n\n"
     "<b>Время</b>: за заказ — часы привязки × количество. Лот на 1 час = почасовой: покупатель сам выбирает "
     "число часов количеством. Каждая покупка выдаёт новый аккаунт; продлить текущий покупатель может только "
     "командой <code>!продление</code> (если она включена).\n\n"
@@ -3038,6 +3131,7 @@ def scr_params(call, *_):
     rows = [[_btn(f"{label}: {_num(S[key])}", f"p:{key}")] for key, (label, _, _, back) in PARAMS.items() if back == "params"]
     rows += [[_btn(f"✏️ Команда продления: {S['ext_word']}", "extw")],
              [_btn(f"🔐 Команда кода Steam Guard: {_code_word()}", "codew")],
+             [_btn(f"{_onoff(S['en_msgs'])} 🇬🇧 Английский для !code, !help…", "t:en_msgs")],
              [_btn(f"{_onoff(S['notify_end'])} Сообщение покупателю об окончании аренды", "t:notify_end")]]
     _edit(call, "⚙️ <b>Прочее</b>\n\nНажмите, чтобы изменить.", _kb(*rows, _back("set")))
 
@@ -3251,7 +3345,7 @@ def act_ap_texts_reset(call, *_):
 
 
 TOGGLE_SCREENS = {"hide_no_stock": scr_main, "review_bonus": scr_bonus, "q_replace": scr_problems,
-                  "q_unbind": scr_problems, "notify_end": scr_params, "ap_active": scr_ac}
+                  "q_unbind": scr_problems, "notify_end": scr_params, "en_msgs": scr_params, "ap_active": scr_ac}
 
 
 def act_toggle(call, key):
