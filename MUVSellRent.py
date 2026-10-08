@@ -38,12 +38,12 @@ if TYPE_CHECKING:
 
 # NAME / VERSION / DESCRIPTION / CHANGELOG / COMPAT / MAP_FILE — по одной строке: их читает сайт (/api/plugins)
 NAME = "MUVSell Rent"
-VERSION = "1.0.8"
+VERSION = "1.0.9"
 DESCRIPTION = "Перепродажа аренды Steam-аккаунтов MUVSell на FunPay: автовыдача, коды Steam Guard, продления, синхронизация наличия и цен, автовыставление лотов, статистика."
 CREDITS = "@MUVSell"
 UUID = "ce1c0a2b-f7df-4a0d-90d3-31012b5ab720"
 SETTINGS_PAGE = True
-CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их. 1.0.7: автовыставление в Steam «Аккаунты с играми» и в «Прочие игры» — любую игру, и ту, у которой на FunPay нет своего раздела: «Автовыставление» → «🎮 В Steam» / «🧩 В «Прочие игры»» → нажмите на игру, и она выставится на все сроки из «Длительностей» по тем же шаблонам (тип «Аренда», регион Steam настраивается); карточка игры тоже показывает сроки из «Длительностей»; при ошибке связи с MUVSell видна причина (таймаут, DNS, SSL, прокси); обновления плагина и карта разделов тоже идут через прокси из настроек. 1.0.8: в «Прочие игры» — только игры без своего раздела на FunPay (остальные выставляет обычное автовыставление)."
+CHANGELOG = "Первая версия: автовыдача аренды MUVSell на FunPay, коды Steam Guard, продления (в том числе временным лотом по !продление), !кик, !пароль, !время, !данные, !помощь, синхронизация наличия и цен с наценкой (глобальной, по категориям и у каждой привязки), автовыставление лотов с редактором текстов, статистика и прибыль, аренды, карантин проблемных лотов, категории уведомлений, шаблоны сообщений с превью, диагностика. 1.0.1: лимит на раздел считает только лоты плагина, минимальная цена лота 1 ₽ — у дешёвых игр сроки больше не сливаются в одну цену. 1.0.2: «Создать недостающие» пересоздаёт лоты, удалённые с FunPay, и лоты, стоявшие в чужом разделе; исправлены разделы EA SPORTS FC 24 и The Forest; проблемные лоты — одним уведомлением. 1.0.3: новые стандартные тексты лотов со списком команд покупателя ({commands} собирается из настроек). 1.0.4: в «Удалить несколько» — «Отметить все» и подтверждение перед удалением. 1.0.5: в комментарий аренды на MUVSell уходит только номер заказа FunPay, без ника покупателя. 1.0.6: каждая покупка лота выдаёт новый аккаунт, продление — только командой !продление (временный лот); !друг и !прод убраны; новые тексты выдачи, предупреждения и описаний лотов — нажмите «Переписать тексты у существующих лотов», а если меняли шаблоны сами — проверьте их. 1.0.7: автовыставление в Steam «Аккаунты с играми» и в «Прочие игры» — любую игру, и ту, у которой на FunPay нет своего раздела: «Автовыставление» → «🎮 В Steam» / «🧩 В «Прочие игры»» → нажмите на игру, и она выставится на все сроки из «Длительностей» по тем же шаблонам (тип «Аренда», регион Steam настраивается); карточка игры тоже показывает сроки из «Длительностей»; при ошибке связи с MUVSell видна причина (таймаут, DNS, SSL, прокси); обновления плагина и карта разделов тоже идут через прокси из настроек. 1.0.8: в «Прочие игры» — только игры без своего раздела на FunPay (остальные выставляет обычное автовыставление). 1.0.9: свою команду для кода Steam Guard можно задать в «⚙️ Прочее» (любое слово, можно без «!») — если на !код у вас отвечает ещё и другой плагин. У каждой привязки теперь свой ID (rentM-1001): плагин сам дописывает его в конец описания лота и находит оплаченный лот по нему, а не только по названию — одинаковые или переименованные лоты больше не путаются."
 COMPAT = "FunPay Cardinal 0.1.17.15"
 MAP_FILE = "muvsell_funpay_map.json"
 
@@ -61,6 +61,7 @@ CREATE_DELAY = 3.0             # пауза между изменениями л
 Q_CAP = 720                    # потолок паузы проблемного лота, мин
 RATE_RX = re.compile(r"много предложений|подождите|too many|слишком часто", re.I)
 MISSING_RX = re.compile(r"не найден|not found|404", re.I)
+TAG_RX = re.compile(r"\brentM-\d+\b", re.I)  # ID привязки последней строкой описания лота
 
 log = logging.getLogger("FPC.muvsell_rent")
 LP = "[MUVSellRent]"
@@ -72,7 +73,7 @@ TEXTS = {  # сообщения покупателю в чат FunPay и тек�
     "delivery": ("🎮 {game} — аккаунт готов!\n\n"
                  "👤 Логин: {login}\n🔑 Пароль: {password}\n"
                  "⏳ Срок: {hours} ч. — до {expires}\n\n"
-                 "🔐 Код Steam Guard — !код\n⌛ Сколько осталось — !время\n📋 Все команды — !помощь\n\n"
+                 "🔐 Код Steam Guard — {guard}\n⌛ Сколько осталось — !время\n📋 Все команды — !помощь\n\n"
                  "🔄 Продлить этот аккаунт: {word} 3 — на 3 ч, {word} 2д — на 2 дня.\n"
                  "🛒 Новая покупка лота выдаст другой аккаунт. Хорошей игры! 🎯"),
     "extended": ("✅ Готово! Аренда {game} продлена на {hours} ч.\n"
@@ -93,7 +94,7 @@ TEXTS = {  # сообщения покупателю в чат FunPay и тек�
     "kick_fail": "⚠️ Не получилось завершить сессии {login}: {reason}",
     "pass_wait": "🔑 Меняю пароль на {login}… Новый пришлю сюда через 1–3 минуты.",
     "pass_ok": ("🔐 Пароль обновлён!\n\n🎮 {game}\n👤 Логин: {login}\n🔑 Новый пароль: {password}\n\n"
-                "Срок аренды не изменился. Код Steam Guard — !код"),
+                "Срок аренды не изменился. Код Steam Guard — {guard}"),
     "pass_fail": "⚠️ Сменить пароль {login} не удалось: {reason}",
     "code": "🔐 Код Steam Guard для {login}: {code}\n⏱ Действует ещё ~{ttl} сек. — вводите сразу.",
     "code_which": "👥 У вас несколько аккаунтов — уточните логин: {cmd} логин\n{logins}",
@@ -138,7 +139,7 @@ VAR_INFO = {  # переменная шаблона: (что это, приме�
     "expires": ("время окончания", "01.10.2026 18:00 МСК"), "left": ("сколько осталось", "45 мин."),
     "code": ("код Steam Guard", "R7K2M"), "ttl": ("сколько секунд живёт код", "24"), "cmd": ("команда", "!код"),
     "logins": ("список логинов", "• muv_cs2_017\n• muv_cs2_042"), "minutes": ("минуты", "10"),
-    "word": ("команда продления", "!продление"), "price": ("цена к оплате, ₽", "45"),
+    "word": ("команда продления", "!продление"), "guard": ("команда кода Steam Guard", "!код"), "price": ("цена к оплате, ₽", "45"),
     "link": ("ссылка на лот", "https://funpay.com/lots/offer?id=12345678"),
     "reason": ("причина", "повторить можно через 10 мин."),
     "bonus": ("часов за отзыв", "2"), "stars": ("нужно звёзд", "5"), "commands": ("список команд (собирается сам)", ""),
@@ -198,6 +199,7 @@ DEFAULTS = {
     "warn_min": 30,
     "ext_cmd": True,            # !продление N — временный лот на N часов
     "ext_word": "!продление",
+    "code_word": "!код",        # своя команда кода Steam Guard — если на !код отвечает ещё и другой плагин
     "ext_minutes": 10,          # сколько живёт временный лот продления
     "buyer_cmds": True,         # !кик и !пароль
     "bonus_hours": 2,
@@ -341,8 +343,18 @@ def _bg(fn, *args):
 
 # ---------------------------------------------------------------- мелочи
 
+def _code_word() -> str:
+    return S.get("code_word") or "!код"
+
+
+def _is_cmd(text) -> bool:
+    text = (text or "").strip().lower()
+    return text.startswith("!") or text.partition(" ")[0] == _code_word()
+
+
 def _t(key: str, **kw) -> str:
     text = (S.get("texts") or {}).get(key) or TEXTS[key]
+    kw.setdefault("guard", _code_word())
     for k, v in kw.items():
         text = text.replace("{" + k + "}", str(v))
     return text
@@ -776,6 +788,7 @@ def _replace_lot(m: dict) -> bool:
     old = str(m["lot_id"])
     with _lock:
         m["lot_id"] = str(new.id)
+        m["tagged"] = False  # у нового лота ID в описании ещё нет
         PROBLEMS.pop(old, None)
         if old in HIDDEN:
             HIDDEN[str(new.id)] = HIDDEN.pop(old)
@@ -839,8 +852,26 @@ def _refresh_titles(sub):
         _save("mappings")
 
 
+def _match_tag(order):
+    """Привязка по ID в описании оплаченного лота (rentM-1001) — надёжнее названия: его могут изменить или повторить."""
+    sub = getattr(getattr(order, "subcategory", None), "id", None)
+    if not any(m.get("tag") and (not sub or not m.get("subcat") or str(m["subcat"]) == str(sub)) for m in MAPS):
+        return None
+    try:
+        desc = str(getattr(cardinal.account.get_order(order.id), "full_description", "") or "")
+    except Exception as e:
+        log.warning(f"{LP} заказ {order.id} не читается, ищу по названию: {e}")
+        return None
+    tags = {t.lower() for t in TAG_RX.findall(desc)}
+    return next((m for m in MAPS if str(m.get("tag", "")).lower() in tags), None)
+
+
 def _match(order) -> list:
-    """Привязки, чьё название лота есть в описании заказа (самое длинное совпадение, тот же раздел)."""
+    """Привязка по ID в описании лота, иначе — чьё название лота есть в описании заказа
+    (самое длинное совпадение, тот же раздел)."""
+    tagged = _match_tag(order)
+    if tagged:
+        return [tagged]
     sub = getattr(getattr(order, "subcategory", None), "id", None)
     desc = _norm(getattr(order, "description", ""))
 
@@ -1062,7 +1093,7 @@ def _pick_rec(chat_id, buyer: str, arg: str, cmd: str):
 
 
 def _cmd_code(chat_id, buyer: str, arg: str):
-    rec = _pick_rec(chat_id, buyer, arg, "!код")
+    rec = _pick_rec(chat_id, buyer, arg, _code_word())
     if not rec:
         return
     api = _api()
@@ -1233,7 +1264,7 @@ def _cmd_creds(chat_id, buyer: str, arg: str):
 
 def _commands_text() -> str:
     word = S.get("ext_word") or "!продление"
-    lines = ["• !код — код Steam Guard", "• !время — сколько осталось", "• !данные — логин и пароль ещё раз"]
+    lines = [f"• {_code_word()} — код Steam Guard", "• !время — сколько осталось", "• !данные — логин и пароль ещё раз"]
     if S.get("ext_cmd"):
         lines.append(f"• {word} 3 — продлить этот аккаунт на 3 ч (или {word} 2д — на 2 дня)")
     if S.get("buyer_cmds"):
@@ -1280,7 +1311,7 @@ def _cmd_password(chat_id, buyer: str, arg: str):
 
 
 COMMANDS = [  # (синонимы, обработчик(chat_id, buyer, arg), включена ли)
-    (("!код", "!code", "!гуард", "!guard", "!кодстим", "!sg"), _cmd_code, lambda: True),
+    (("!код", "!code", "!гуард", "!guard", "!кодстим", "!sg"), _cmd_code, lambda: _code_word() == "!код"),
     (("!время", "!срок", "!time"), lambda c, b, a: _cmd_time(c, b), lambda: True),
     (("!данные", "!логин", "!data", "!acc"), _cmd_creds, lambda: True),
     (("!помощь", "!команды", "!help", "!commands"), lambda c, b, a: _send(c, _t("help", commands=_commands_text())),
@@ -1298,6 +1329,8 @@ def _on_command(chat_id, buyer, text: str):
     cmd, arg, buyer = cmd.lower(), arg.strip(), buyer.lower()
     if buyer not in RENT:  # плагин ничего ему не выдавал — молчим: на !код может отвечать другой плагин аренды
         return
+    if cmd == _code_word():
+        return _cmd_code(chat_id, buyer, arg)
     if S.get("ext_cmd") and cmd == str(S.get("ext_word") or "!продление").lower():
         return _cmd_ext_lot(chat_id, buyer, arg)
     for names, handler, enabled in COMMANDS:
@@ -1333,7 +1366,7 @@ def on_new_message(c: "Cardinal", event):
     try:
         if msg.type != MessageTypes.NON_SYSTEM:
             return _on_review(msg)
-        if msg.author_id in (0, c.account.id) or msg.by_bot or not (msg.text or "").strip().startswith("!"):
+        if msg.author_id in (0, c.account.id) or msg.by_bot or not _is_cmd(msg.text):
             return
         _on_command(msg.chat_id, msg.author or msg.chat_name, msg.text)
     except Exception:
@@ -1345,7 +1378,7 @@ def on_last_chat_message_changed(c: "Cardinal", event):
     chat = event.chat
     try:
         if (getattr(c, "old_mode_enabled", False) and chat.unread and not chat.last_by_bot
-                and (chat.last_message_text or "").strip().startswith("!")):
+                and _is_cmd(chat.last_message_text)):
             _on_command(chat.id, chat.name, chat.last_message_text)
     except Exception:
         log.exception(f"{LP} чат")
@@ -1405,6 +1438,41 @@ def _sync_lots():
     if back:
         _notify("📦 Снова в продаже — аккаунты появились:\n" + "\n".join(f"• {esc(_mlabel(m))}" for m in back[:15]),
                 cat="stock")
+
+
+def _with_tag(text: str, m: dict) -> str:
+    """Описание лота с ID привязки последней строкой (чужие ID — например, у копии лота — убираются)."""
+    text = TAG_RX.sub("", text or "").rstrip()
+    return f"{text}\n\n{m['tag']}" if text and m.get("tag") else text
+
+
+def _tag_lots(limit: int = 10):
+    """Выдаёт привязкам ID (rentM-1001…, номера не повторяются) и дописывает его в конец описания лота на FunPay:
+    по нему заказ находит привязку. За проход — не больше limit лотов, чтобы не упереться в лимиты FunPay."""
+    if not S.get("fp_edit"):
+        return
+    for m in [m for m in MAPS if m.get("lot_id") and not m.get("tagged")][:limit]:
+        if not m.get("tag"):
+            with _lock:
+                n = max([int(S.get("tag_seq") or 1000)] + [int(x["tag"][6:]) for x in MAPS if x.get("tag")]) + 1
+                S["tag_seq"], m["tag"] = n, f"rentM-{n}"
+            _save("settings")
+            _save("mappings")
+
+        def go(lf):
+            old = (lf.description_ru, lf.description_en)
+            lf.description_ru, lf.description_en = _with_tag(old[0], m), _with_tag(old[1], m)
+            if (lf.description_ru, lf.description_en) != old:
+                cardinal.account.save_lot(lf)
+                time.sleep(CREATE_DELAY)
+            return True
+        try:
+            ok = _lot_do(m, go)
+        except _RateLimited:
+            return
+        if ok:
+            m["tagged"] = True
+            _save("mappings")
 
 
 def _reprice(targets: list, prods: dict, on_step=None):
@@ -1533,6 +1601,8 @@ def _poll_loop():
             if S.get("enabled"):
                 _end_notices()
                 _sync_lots()
+                if not _state["job"]:
+                    _tag_lots()
                 if (S.get("fp_edit") and not _state["job"]
                         and time.time() - last_price > max(1, float(S.get("price_min") or 5)) * 60):
                     last_price = time.time()
@@ -1895,7 +1965,8 @@ def _run_retext(chat_id, msg_id):
         ru, en, desc_ru, desc_en = _lot_texts(m["game"], int(m["hours"]))
 
         def go(lf):
-            lf.title_ru, lf.title_en, lf.description_ru, lf.description_en = ru, en, desc_ru, desc_en
+            lf.title_ru, lf.title_en = ru, en
+            lf.description_ru, lf.description_en = _with_tag(desc_ru, m), _with_tag(desc_en, m)
             cardinal.account.save_lot(lf)
             return True
         try:
@@ -2074,11 +2145,13 @@ HELP = (
     "1. На <b>muvsell.store</b>: Профиль → API → создайте ключ и пополните баланс.\n"
     "2. Здесь: ⚙️ Настройки → «🔑 API ключ» → отправьте ключ.\n"
     "3. Лоты: «🤖 Автовыставление» создаст лоты по всем играм MUVSell, «🎮 Создать привязку» — по одной игре, "
-    "«🔗 Привязать лот» — привяжет ваш готовый лот.\n"
+    "«🔗 Привязать лот» — привяжет ваш готовый лот. В конец описания каждого привязанного лота плагин сам "
+    "допишет его ID (<code>rentM-1001</code>) и по нему узнаёт оплаченный лот — не удаляйте эту строку.\n"
     "4. Покупатель оплачивает лот → плагин арендует аккаунт на MUVSell (с вашего баланса) "
     "и сразу присылает логин и пароль в чат FunPay.\n\n"
     "<b>Команды покупателя</b> (в чате FunPay)\n"
-    "• <code>!код</code> / <code>!гуард</code> — код Steam Guard\n"
+    "• <code>!код</code> / <code>!гуард</code> — код Steam Guard (свою команду — в «⚙️ Прочее», если на !код "
+    "отвечает ещё и другой плагин)\n"
     "• <code>!время</code> — сколько осталось, <code>!данные</code> — логин и пароль ещё раз\n"
     "• <code>!продление 3</code> или <code>!продление 2д</code> — плагин создаёт временный лот на этот срок, "
     "оплата продлевает ту же аренду, лот удаляется\n"
@@ -2260,6 +2333,8 @@ def scr_map(call, lot_id):
     _edit(call, f"🔗 <b>Привязка</b>\n\n🎮 {esc(m['game'])} (<code>{esc(m['game_id'])}</code>)\n"
                 f"🆔 Лот: <a href=\"https://funpay.com/lots/offer?id={lot_id}\">{lot_id}</a>\n"
                 f"🏷 Название: <code>{esc((m.get('titles') or ['—'])[0])}</code>\n"
+                f"🔖 ID в описании: " + (f"<code>{m['tag']}</code>" if m.get("tagged") else "ставится…" if S.get("fp_edit")
+                                          else "нет — плагину запрещено менять лоты") + "\n"
                 f"⏱ За 1 шт: <b>{_dur(hours)}</b>\n"
                 f"💰 Цена FP: <b>{_num(m['price']) + '₽' if m.get('price') else '?'}</b>"
                 + (f" (база MUVSell {_rub(_cost(_api(), prod, hours))} → по наценке {_price(_api(), prod, hours, m)}₽)"
@@ -2962,6 +3037,7 @@ def act_problems_notify(call, *_):
 def scr_params(call, *_):
     rows = [[_btn(f"{label}: {_num(S[key])}", f"p:{key}")] for key, (label, _, _, back) in PARAMS.items() if back == "params"]
     rows += [[_btn(f"✏️ Команда продления: {S['ext_word']}", "extw")],
+             [_btn(f"🔐 Команда кода Steam Guard: {_code_word()}", "codew")],
              [_btn(f"{_onoff(S['notify_end'])} Сообщение покупателю об окончании аренды", "t:notify_end")]]
     _edit(call, "⚙️ <b>Прочее</b>\n\nНажмите, чтобы изменить.", _kb(*rows, _back("set")))
 
@@ -3144,8 +3220,8 @@ def scr_ap_texts(call, *_):
                 "автовыставление создаёт лоты — обычное, в Steam и в «Прочие игры».\n\n🔤 <b>Переменные</b> "
                 "(подставляются автоматически):\n"
                 "• <code>{game}</code> — название игры\n• <code>{time}</code> — срок аренды (напр. «1 день», «3 часа»)\n\n"
-                "⚠️ <b>Лимиты FunPay:</b>\n• Название (краткое описание) — желательно ≤ 70 символов, иначе FunPay "
-                "обрежет (EN режется автоматически).\n• Английское описание не должно быть коротким — минимум "
+                "⚠️ <b>Лимиты FunPay:</b>\n• Название (краткое описание) — не длиннее 100 символов: это предел FunPay "
+                "(EN плагин обрежет сам).\n• Английское описание не должно быть коротким — минимум "
                 f"~{EN_MIN} символов, иначе FunPay отклонит лот. Если ваше EN-описание короче — плагин сам дополнит его "
                 f"стандартным текстом.\n\nНажмите на поле, чтобы изменить. В скобках — длина превью для примера "
                 f"«{AP_SAMPLE[0]}», {_dur(AP_SAMPLE[1])}.",
@@ -3155,7 +3231,7 @@ def scr_ap_texts(call, *_):
 
 def act_ap_field(call, field):
     hint = (f"⚠️ Для EN-описания минимум ~{EN_MIN} символов (иначе FunPay отклонит; короткое плагин дополнит сам)."
-            if field == "desc_en" else "⚠️ Лимит названия: ≤ 70 символов (длиннее FunPay обрежет)."
+            if field == "desc_en" else "⚠️ Лимит названия: ≤ 100 символов — это предел FunPay."
             if field.startswith("title") else "ℹ️ Описание может быть любой разумной длины.")
     preview = _ap_preview(field)
     _ask(call, f"aptext:{field}", f"✏️ <b>{AP_LABELS[field]}</b>\n\nТекущий шаблон:\n<code>{esc(_ap_text(field))}</code>\n\n"
@@ -3211,6 +3287,11 @@ ACTIONS = {
     "qn": act_problems_notify, "params": scr_params, "p": act_param,
     "extw": lambda call, *_: _ask(call, "extword", "✏️ Команда, по которой покупатель получает ссылки на продление "
                                                    "(напр. <code>!продление</code>):", "params"),
+    "codew": lambda call, *_: _ask(call, "codeword", "🔐 Команда, по которой покупатель получает код Steam Guard — "
+                                                     "любое слово, можно без «!» (напр. <code>!гуард</code> или "
+                                                     "<code>код</code>). Пригодится, если на <code>!код</code> отвечает "
+                                                     "ещё и другой плагин. Вернуть как было — <code>!код</code>:",
+                                   "params"),
     "texts": scr_texts, "tx": act_text, "txra": act_texts_reset_all,
     "ac": scr_ac, "acf": act_ac_refresh, "acp": scr_preview, "acgo": act_create, "acd": act_delete_auto,
     "acdy": act_delete_auto_yes, "apt": scr_ap_texts, "apf": act_ap_field, "aptr": act_ap_texts_reset,
@@ -3379,6 +3460,16 @@ def in_ext_word(uid, text, _):
     return f"✅ Команда продления: {esc(word)}", [_back("params")], None
 
 
+def in_code_word(uid, text, _):
+    word = text.strip().split()[0].lower() if text.strip() else ""
+    taken = {n for names, _, _ in COMMANDS[1:] for n in names} | {str(S.get("ext_word") or "").lower()}
+    if not word or word in taken:
+        return "❌ Нужно одно слово, не занятое другой командой (!время, !продление…).", [_back("params")], None
+    S["code_word"] = word
+    _save("settings")
+    return f"✅ Команда кода Steam Guard: {esc(word)}", [_back("params")], None
+
+
 def in_text(uid, text, key):
     if text.strip() == "-":
         S.setdefault("texts", {}).pop(key, None)
@@ -3431,6 +3522,7 @@ INPUTS = {
     "key": in_key, "hours": in_hours, "mapmk": in_map_markup, "lot": in_lot, "search": in_search,
     "mapsearch": in_map_search, "gamesearch": in_game_search, "newmap": in_newmap, "param": in_param,
     "catmk": in_cat_markup, "proxy": in_proxy, "rext": in_rental_extend, "extword": in_ext_word, "text": in_text,
+    "codeword": in_code_word,
     "aptext": in_ap_text, "apdur": in_ap_durations, "apown": in_ap_own, "stregion": in_steam_region,
 }
 
